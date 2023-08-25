@@ -1,0 +1,481 @@
+/*
+
+Старый код ненужен. Вообще. Не стоит его копить.
+
+*/
+html, body {
+    background: #F5F5F5;
+    width: 100%;
+    margin: 0 auto;
+    padding:0px;
+    font: normal 90% "Trebuchet MS", Verdana, Helvetica, Arial,sans-serif !important;
+    font-size: 12px;
+}
+
+a {
+    color: #000;
+    -webkit-transition: color 0.2s;
+    -moz-transition: color 0.2s;
+    -o-transition: color 0.2s;
+    transition: color 0.2s;
+}
+a:hover {
+    text-decoration: none;
+    cursor:pointer;
+}
+img {
+    border-width: 0px;
+}
+img.pic {
+    float: left;
+    margin: 3px;
+    max-width: 150px;
+    padding-right: 5px;
+    vertical-align: top;
+}
+hr {
+    margin:5px 0;
+    border-style: solid none none none;
+    border-width: 1px;
+    border-color: #353535;
+}
+menu{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+/*
+===Шапка===
+*/
+header {
+    padding: 5px 0;
+    border-bottom: 5px solid #151515;
+    padding-left: 30px;
+}
+.header-add {
+    background: #F8F8F8;
+    float: right;
+    border-top: 3px solid #C93037;
+}
+.header-add span{
+    padding: 10px;
+    display: inline-block;
+}
+.header-add a{
+    padding: 10px;
+    display: inline-block;
+    background: #EEE;
+    text-decoration: none
+}
+.header-add a:hover{
+    color: #808080;
+    background: #f2f2f2;
+}
+span.datetime {
+    font-size: 12px;
+    display: block;
+    color: #888;
+}
+.rat-com{font-weight: bold;}
+.rat-com.red{color: #C72525;}
+.rat-com.green{color: #25C725;}
+
+
+/*
+===Левое меню===
+*/
+.left-colm{
+    width:15%;
+    height: 100%;
+}
+.left-menu{
+    font-size: 10pt;
+    padding: 0px 10px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: #252525 url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANIAAACsCAMAAAA5bwLBAAAAIVBM…zSAMsOP5gBE7vF0ZoWbhiS4s5ae2TAK4Kt8BAK0kC/wNq2jo1mbHe+gAAAABJRU5ErkJggg==') repeat-y left top;
+    width: 195px;
+    z-index: 2;
+}
+.left-menu a{color:#fff;text-decoration: none;}
+.left-menu a:hover{color:#808080;}
+.left-menu a:focus, .left-menu a:active {color: #C33;}
+.left-menu .category {
+    padding:3px;
+    margin: 3px 0;
+}
+.category * {
+    vertical-align: middle;
+}
+.left-menu h2.title {
+    font-weight: normal;
+    font-size: 15px;
+    padding: 5px 10px;
+    color: #eee;
+    margin: 0;
+}
+.icon {
+    height: 16px;
+    width: 16px;
+}
+.menu-a {
+    padding: 3px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+
+
+/*
+===Блок новости===
+*/
+.content {
+    padding: 5px 20px;
+}
+div.entry {
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    padding: 12px;
+    color: #444;
+}
+div.entry:hover {
+    color: #000;
+}
+.entry:last-child {
+    border: none;
+}
+.news-header .title {
+    font-size: 20px;
+    display: inline-block;
+    color: #004276;
+}
+.news-header .title a{
+    color: #004276;
+}
+.news-header .info {
+    font-size: 11px;
+    color: #AAA;
+    display: block;
+}
+.news-header .info a{
+    color: #AAA;
+}
+.news-header .info a:hover{
+    color: #000;
+}
+
+.news-info {
+    font-size: 12px;
+    color: #AAA;
+    margin: 5px 0;
+}
+.news-info a {
+}
+.news-info a.link{
+    border-bottom: 1px dotted #666;
+    text-decoration: none;
+}
+.news-info a.link:hover{
+    color: #000;
+    border-bottom: 1px dotted #000;
+    text-decoration: none;
+}
+.link-adm {
+    color: #AAA;
+    text-decoration: none;
+}
+.link-adm:hover {
+    color: #666;
+}
+
+i[class^="icon-"], i[class*=" icon-"] {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-top: 1px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url("../images/glyphicons-halflings.png");
+    background-position: 14px 14px;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+    cursor: pointer;
+}
+i[class^="icon-"]:hover, i[class*=" icon-"]:hover {
+    opacity: 1;
+}
+.icon-arrow-down {
+    background-position: -312px -96px!important;
+}
+.icon-arrow-up {
+    background-position: -289px -96px!important;
+}
+
+
+/*
+===Подвал===
+*/
+div.footerline {
+    margin:0px;
+    background: #151515;
+    color: #777;
+    -webkit-box-shadow: 0 0 15px #B1B1B1;
+    -moz-box-shadow: 0 0 15px #b1b1b1;
+    box-shadow: 0 0 15px #B1B1B1;
+    padding:16px 16px 30px 5%;
+    font-size: 12px;
+}
+div.footerline a{
+    color: #888;
+    text-decoration: none;
+}
+div.footerline a:hover{
+    color: #eee;
+}
+.s-colm{
+    width:6px;
+}
+
+.cont-colm {
+background: #FFF;
+width: 980px;
+-webkit-box-shadow: 0 0 15px #B1B1B1;
+-moz-box-shadow: 0 0 15px #b1b1b1;
+box-shadow: 0 0 15px #B1B1B1;
+    border-bottom: none;
+    padding-left: 215px !important;
+    clear: both;
+}
+.cont-header{
+    font-weight: bold;
+    font-size: 18px;
+    color: #990000;
+    margin: 10px 0;
+}
+.cont-bottom{
+    font-size: 14px;
+    padding: 10px;
+    width: 100%;
+}
+.cont-bottom .left{
+    text-align:left;
+}
+.cont-bottom .right{
+    text-align:right;
+}
+tbody{
+    font-size:13px;
+}
+
+#createcomm .olive {height: 150px;}
+.olive {
+    background: whiteSmoke;
+    padding: 10px;
+}
+
+.please{
+    background: #E9D880;
+    padding: 2px 5px;
+    margin: 6px 0;
+}
+
+img.newspaper {
+    border: 1px solid #808080;
+    /*float:right; */
+}
+
+.comment {
+    border-bottom: 2px solid #EEE;
+    padding: 5px 10px 0 10px;
+    background: #F9F9F9;
+}
+.comment .comment-text{
+    word-break: break-all;
+    padding: 0 15px;
+}
+.comment .comment-info {
+    font-size: 11px;
+    color: #777;
+}
+.comment a {
+    color: #004276;
+    text-decoration:underline;
+}
+/*.tooltip-content{
+width: 350px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+border-radius: 20px;
+display: none;
+position: absolute;
+padding: 10px;
+}
+*/
+.highlight {
+    border: 2px dashed #cbc793;
+}
+div.big-message {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 150px;
+    padding-bottom: 150px;
+    font: bold 18px/24px Arial;
+    color: #999;
+}
+input[type="text"], .add-text {
+    border: 1px solid #CCC;
+    padding: 5px;
+}
+
+.add-block{
+    clear: both;
+    margin: 0 auto;
+    padding: 10px 0 5px 0;
+}
+.add-block h2{
+    font-size: 13px;
+}
+.add-block p{
+    margin: 0;
+    padding: 3px 2px;
+}
+.block-option {
+    border: 1px solid #CCC;
+    padding: 5px;
+}
+
+#commentText {
+    border: 1px solid #DDD;
+    width: 99%;
+    height: 60px;
+}
+#captchaimage {
+    height: 30px;
+    width: 90px;
+    vertical-align: top;
+}
+.spoiler {
+    background: #ededed;
+    color: #ededed;
+}
+.spoiler:hover {
+    background: #eee;
+    color: #777;
+}
+
+.youtube {
+    display: inline-block;
+}
+.youtube-link{
+    display: inline-block;
+    width: 360px;
+    height: 228px;
+    background-color: rgb(0, 0, 0);
+    background-position: 50% 50%;
+    background-repeat: no-repeat no-repeat;
+}
+.pr {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background: whiteSmoke;
+    border: 1px solid rgb(235, 235, 235);
+    border-top: none;
+    border-left: none;
+}
+.pr-text {
+    background-image: url(/images/progressbar.gif);
+    background-repeat: no-repeat;
+    background-position: 5px 10px;
+    padding: 10px 20px;
+    color: #268289;
+    font-size: 13px;
+    padding-left: 25px;
+}
+.pr.error{
+    background: rgb(248, 214, 214);
+    border-color: #FFC0C0;
+}
+.pr-text.error {
+    background-image:none;
+    color: #D84E4E;
+}
+.pr.success{
+    background: #D6F8D7;
+    border-color: #C0FFC8;
+}
+.pr-text.success {
+    background-image:none;
+    color: #3E8A37;
+}
+
+.closed, a.closed {
+    text-decoration: line-through;
+    color: #aaa;
+}
+.new{
+    background-color: rgba(231, 206, 19, 0.28);
+}
+#href{
+    text-decoration: underline
+}
+.tooltip-content {
+    display:none;
+    padding: 10px;
+    z-index: 2;
+    width: 350px;
+    background: rgb(214, 214, 214);
+    color: #160101;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    position: absolute;
+}
+.tooltip-content .t-text{
+    word-break: break-all;
+    padding: 5px 15px;
+}
+.tooltip-content  a {
+    color: #006CFF;
+}
+.discach{
+    color: rgb(255, 0, 0);
+}
+
+/*1195 vtlb*/
+@media screen and (max-width: 1195px){
+.cont-colm {
+width: auto;
+-webkit-box-shadow: 0;
+-moz-box-shadow: 0;
+box-shadow: 0;
+}
+
+}
+@media screen and (max-width: 700px){
+    .left-colm {
+        display: none;
+    }
+    .cont-colm {
+        padding: 0!important;
+    }
+    .content {
+        padding: 3px 5px;
+    }
+}
+a.nav {
+    font-size: 15px;
+    text-decoration: underline;
+}
+a.nav:hover {
+    font-size: 15px;
+    text-decoration: none;
+}
+span.yobka {
+	font-style: italic;
+	color: #789922;
+}
