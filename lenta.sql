@@ -29,22 +29,27 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `blog` (
-  `id` int(11) NOT NULL,
-  `subject` varchar(70) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `message` text COLLATE utf8_unicode_ci NOT NULL,
-  `fullmessage` text COLLATE utf8_unicode_ci NOT NULL,
-  `rating` int(11) NULL DEFAULT '0',
-  `timestamp` int(12) NOT NULL,
-  `chan` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `link` text COLLATE utf8_unicode_ci NOT NULL,
-  `category` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `parrent` int(11) NOT NULL,
-  `ip` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `real` varchar(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
-  `ch` int(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `subject` VARCHAR(70) NOT NULL DEFAULT '',
+  `message` TEXT NOT NULL,
+  `fullmessage` TEXT NOT NULL DEFAULT '',
+  `rating` INT(11) NOT NULL DEFAULT '0',
+  `timestamp` INT(12) NOT NULL,
+  `chan` VARCHAR(20) NOT NULL DEFAULT '',
+  `link` TEXT NOT NULL DEFAULT '',
+  `category` VARCHAR(3) NOT NULL DEFAULT '',
+  `type` VARCHAR(10) NOT NULL,
+  `parrent` INT(11) NOT NULL,
+  `ip` VARCHAR(20) NOT NULL,
+  `real` VARCHAR(1) NOT NULL DEFAULT '0',
+  `ch` INT(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id` (`id`) 
+)
+COLLATE='utf8_unicode_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=2
+;
 -- --------------------------------------------------------
 
 --
@@ -96,12 +101,6 @@ CREATE TABLE `was` (
 -- Индексы сохранённых таблиц
 --
 
---
--- Индексы таблицы `blog`
---
-ALTER TABLE `blog`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
 
 --
 -- Индексы таблицы `online`
