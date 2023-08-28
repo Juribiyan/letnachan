@@ -1,4 +1,4 @@
-<?PHP
+<?PHP // see below: indentation style used by the utterly Deranged
 class Obj
     {
     var $variable_name;
@@ -13,7 +13,7 @@ class FormValidator
     var $validator_array;
     var $error_hash;
     var $custom_validators;
-    function FormValidator()
+    function __construct()
         {
         $this->validator_array   = array();
         $this->error_hash        = array();
