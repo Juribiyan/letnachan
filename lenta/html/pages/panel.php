@@ -55,7 +55,7 @@ if (isset($_POST['login']) && isset($_POST['password'])){
     }
 }
 	function CheckLoginS(){
-		if($_SESSION['user_login'] or $_SESSION['user_name']){
+		if(@$_SESSION['user_login'] or @$_SESSION['user_name']){
 			return true;
 		}else{
 			return false;
