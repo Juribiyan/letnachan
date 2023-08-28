@@ -10,11 +10,10 @@ require_once 'inc/func.php';
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title><?php
+        $title = SITE_TITLE . ': ' . SITE_SUBTITLE;
         $url = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $url = parse_url($url);
-        if (!isset($url['path']) OR $url['path'] == '/'){
-            $title = 'Lentachan.ru: Новости имиджборд';
-        }
+
         if ($url['path'] == '/random'){
             $title = 'Все новости';
         }
