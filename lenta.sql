@@ -133,12 +133,6 @@ ALTER TABLE `was`
 --
 
 --
--- AUTO_INCREMENT для таблицы `blog`
---
-ALTER TABLE `blog`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT для таблицы `online`
 --
 ALTER TABLE `online`
