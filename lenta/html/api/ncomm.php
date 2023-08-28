@@ -13,7 +13,7 @@ $ip      = ip2long($_SERVER['REMOTE_ADDR']); # IP
 $parrent = $_POST['entry']; # Тред
 $time    = time(); # Время
 $result = $db->query("SELECT * FROM `blog` WHERE `ip`='$ip' ORDER BY id DESC LIMIT 1");
-while ($result->fetch_array()) {
+while ($row = $result->fetch_array()) {
     $wipe = $row['timestamp'];
 }
 ob_start();
