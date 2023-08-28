@@ -6,3 +6,4 @@ lenta/html/api/was
 lenta/html/api/comms/*
 Backup * of *
 /favicon.ico
+lenta/logs/error.log
