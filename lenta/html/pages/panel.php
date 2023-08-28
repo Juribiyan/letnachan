@@ -21,6 +21,10 @@ function my_crypt($pass,$salt){
 	return md5($temp);
 }
 
+if (@$_GET['getpass']) {
+	echo my_crypt($_GET['getpass'], $secretWord);
+}
+
 # Идеальный код регистрации на ленте.
 /*if($_GET['reg'] == "1"){
 	echo "<p>Создание аккаунта.</p>";
