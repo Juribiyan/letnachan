@@ -1,6 +1,9 @@
 <?php
 require 'inc/parse.php';
 
+require_once 'db.php';
+$db = connect_db();
+
 $secretWord = 'jdfskflsd6sd4f8sd5f46sd8s';
 function my_crypt($pass,$salt){
 	$spec=array('~','!','@','#','$','%','^','&','*','?');
@@ -38,13 +41,12 @@ $reg_name = $_POST['reg_name'];
 }*/
 
 if (isset($_POST['login']) && isset($_POST['password'])){
-    $login = mysql_real_escape_string($_POST['login']);
+    $login = $db->real_escape_string($_POST['login']);
     $password = my_crypt($_POST['password'], $secretWord);
-
     $query = "SELECT * FROM `users` WHERE `login`='{$login}' AND `password`='{$password}' LIMIT 1";
-    $sql = mysql_query($query) or die(mysql_error());
-    if (mysql_num_rows($sql) == 1) {
-        $row = mysql_fetch_assoc($sql);
+    $sql = $db->query($query) or die($db->error);
+    if ($sql->num_rows == 1) {
+        $row = $sql->fetch_assoc();
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user_name'] = $row['name'];
     }
@@ -67,8 +69,8 @@ if(CheckLoginS()){
 			echo '<h1>Редактируем запись.</h1>';
 			$idPost = $_GET['id'];
 			$sqlquery = ("SELECT * FROM `blog` WHERE `id` = $idPost ORDER BY `timestamp` DESC");    
-			$results = mysql_query($sqlquery);
-			while ($row = mysql_fetch_assoc($results)) {
+			$results = $db->query($sqlquery);
+			while ($row = $results->fetch_assoc()) {
 
 			    echo "<br><form action='panel?edit&id=".$row['id']."' method='post' name='form_add'>
 			    <input type='text' name='subject' value=\"".$row['subject']."\"><br>
@@ -82,31 +84,31 @@ if(CheckLoginS()){
 			}
 			if(isset($_POST['subject']) AND isset($_POST['message'])){	
 				$name = $_POST['subject'];
-				$text = mysql_real_escape_string($_POST['message']);
-				$text2 = mysql_real_escape_string($_POST['fullmessage']);
+				$text = $db->real_escape_string($_POST['message']);
+				$text2 = $db->real_escape_string($_POST['fullmessage']);
 				$link = $_POST['link'];
-				$results = mysql_query("UPDATE `blog` SET `subject`='$name',`message`='$text',`fullmessage`='$text2',`link`='$link' WHERE `id` = $idPost");
+				$results = $db->query("UPDATE `blog` SET `subject`='$name',`message`='$text',`fullmessage`='$text2',`link`='$link' WHERE `id` = $idPost");
 				header("location: panel");
 				exit;
 			}			
 		}elseif(isset($_GET['del'])){
 			$id = $_GET['id'];
 			if(isset($_GET['com'])){
-				$results = mysql_query("DELETE FROM `comments` WHERE `id` = $id");
+				$results = $db->query("DELETE FROM `comments` WHERE `id` = $id");
 				header("location: panel?com");
 				exit;
 			}else{
-				$results = mysql_query("DELETE FROM `blog` WHERE `id` = $id");
-				$results = mysql_query("DELETE FROM `comments` WHERE `thread` = $id");
+				$results = $db->query("DELETE FROM `blog` WHERE `id` = $id");
+				$results = $db->query("DELETE FROM `comments` WHERE `thread` = $id");
 				header("location: panel");
 				exit;
 			}
 		}elseif(isset($_GET['real'])){
 			$id = $_GET['id'];
-			$results = mysql_query("UPDATE `blog` SET `real`='1' WHERE `id` = $id");				
+			$results = $db->query("UPDATE `blog` SET `real`='1' WHERE `id` = $id");				
 		}elseif(isset($_GET['unreal'])){
 			$id = $_GET['id'];
-			$results = mysql_query("UPDATE `blog` SET `real`='0' WHERE `id` = $id");
+			$results = $db->query("UPDATE `blog` SET `real`='0' WHERE `id` = $id");
 		}
 
 }else{

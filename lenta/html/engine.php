@@ -17,15 +17,16 @@ ob_end_clean();
 
 error_log($contents); */
 
-$csbl_db = mysql_connect('localhost', '', '');
-mysql_select_db('lenta', $csbl_db);
-mysql_query("SET NAMES 'utf8'");
-mysql_query("SET CHARACTER SET 'utf8'");
-mysql_query("SET SESSION collation_connection = 'utf8_unicode_ci'");
-$li_URL = "https://lentachan.ru"; // Няшный адерс  # Прошу без слеша в конце
+require_once 'db.php';
+$db = connect_db();
+
+// $li_URL = "https://lentachan.ru"; // Няшный адерс  # Прошу без слеша в конце
+$li_URL = "";
+
 $papa = '10'; // Записей на страницу
 $li_winnews = '';
-$pushserver = 'https://psh.lentachan.ru';
+// $pushserver = 'https://psh.lentachan.ru';
+
 #Лимиты
 $title_lim = "73";
 function limitlines($string, $lines)
@@ -121,9 +122,9 @@ function whatcat($category)
 }
 function countcoms($thread)
 {
-	$countcom = ("SELECT COUNT(`id`) FROM `blog` WHERE `parrent` = $thread ");
-	$countcom = mysql_query($countcom);
-	$countcom = mysql_fetch_row($countcom);
-	$countcom = max($countcom);
-	return $countcom;
+	global $db;
+	
+	$countcom = $db->query("SELECT COUNT(`id`) as cc FROM `blog` WHERE `parrent` = $thread")
+	->fetch_assoc();
+	return $countcom['cc'];
 }

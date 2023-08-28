@@ -1,21 +1,20 @@
 <?php
 include("engine.php");
-require_once "Dklab/Realplexor.php";
+// require_once "Dklab/Realplexor.php";
 function rape($id, $method)
 {
-    $rpl = new Dklab_Realplexor("127.0.0.1", "10010", "main");
-    $sql_one     = "SELECT * FROM `blog` WHERE `id`='" . $id . "' AND `type`='thread'";
-    $query_one   = mysql_query($sql_one);
-    $rmethod     = mysql_fetch_assoc($query_one);
+    global $db; 
+
+    // $rpl = new Dklab_Realplexor("127.0.0.1", "10010", "main");
+    $res = $db->query("SELECT * FROM `blog` WHERE `id`='" . $id . "' AND `type`='thread'")
+    ->fetch_assoc();
     $ip          = ip2long($_SERVER['REMOTE_ADDR']);
-    $get_numbers = $rmethod['rating'];
+    $get_numbers = $res['rating'];
     //----
     $sql_two     = "SELECT * FROM `rate` WHERE `ip`='" . $ip . "' AND `thread`='" . $id . "'";
-    $query_two   = mysql_query($sql_two);
-    if (mysql_num_rows($query_two)) {
-        $getrate         = "SELECT * FROM `blog` WHERE `id`='" . $id . "'";
-        $getrate2        = mysql_query($getrate);
-        $rating          = mysql_fetch_assoc($getrate2);
+    $res2   = $db->query("SELECT * FROM `rate` WHERE `ip`='" . $ip . "' AND `thread`='" . $id . "'");
+    if ($res2->num_rows) {
+        $rating        = $db->query("SELECT * FROM `blog` WHERE `id`='" . $id . "'")->fetch_assoc();
         $say['response'] = '100';
         $say['message']  = 'Вы уже голосовали за эту новость';
         exit(json_encode($say));
@@ -28,14 +27,12 @@ function rape($id, $method)
         $new_numbers = $get_numbers - 1;
     }
     if ($get_numbers !== $new_numbers) {
-        mysql_query("UPDATE `blog` SET `rating`='" . $new_numbers . "'  WHERE `id`='" . $id . "'");
-        mysql_query("INSERT INTO `rate` SET `ip`='" . $ip . "',`thread`='" . $id . "'");
-        $getrate         = "SELECT * FROM `blog` WHERE `id`='" . $id . "'";
-        $getrate2        = mysql_query($getrate);
-        $rating          = mysql_fetch_assoc($getrate2);
+        $db->query("UPDATE `blog` SET `rating`='" . $new_numbers . "'  WHERE `id`='" . $id . "'");
+        $db->query("INSERT INTO `rate` SET `ip`='" . $ip . "',`thread`='" . $id . "'");
+        $rating = $db->query("SELECT * FROM `blog` WHERE `id`='" . $id . "'")->fetch_assoc();
         $say['response'] = '200';
         $resonance = ($rating['rating'] < 0 ? 'red' : 'green');
-        $rpl->send(array("updater"), array('rate' => array('id' => $id, 'rating' => $rating['rating'], 'resonance' => $resonance)));
+        // $rpl->send(array("updater"), array('rate' => array('id' => $id, 'rating' => $rating['rating'], 'resonance' => $resonance)));
         $say['message']  = 'Ваш голос засчитан';
         exit(json_encode($say));
         echo $new_numbers;

@@ -3,12 +3,11 @@ include '../engine.php';
 include '../inc/func/stringformatting.php';
 $thread     = (int) $_POST['id'];
 $lastidcomm = (int) $_POST['last'];
-$comments   = ("SELECT * FROM `blog` WHERE `parrent` = $thread AND `type`='post' AND `id`>$lastidcomm ORDER BY `timestamp` ASC");
-$comments   = mysql_query($comments);
+$comments   = $db->query("SELECT * FROM `blog` WHERE `parrent` = $thread AND `type`='post' AND `id`>$lastidcomm ORDER BY `timestamp` ASC");
 $counter = 0;
-if (mysql_num_rows($comments)>0)
+if ($comments->num_rows > 0)
 {
-    while ($row = mysql_fetch_assoc($comments))
+    while ($row = $comments->fetch_assoc())
     {
         $counter +=1;
           $comid = $row['id'];

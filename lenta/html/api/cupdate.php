@@ -31,9 +31,8 @@ if ($lastid == $count)
 else
 {
     $counter = 0;
-    $comments   = ("SELECT * FROM `blog` WHERE `parrent` = $thread AND `type`='post' AND `id`>$lastid ORDER BY `timestamp` ASC");
-    $comments   = mysql_query($comments);
-    while ($row = mysql_fetch_assoc($comments))
+    $comments   = $db->query("SELECT * FROM `blog` WHERE `parrent` = $thread AND `type`='post' AND `id`>$lastid ORDER BY `timestamp` ASC");
+    while ($row = $comments->fetch_assoc())
     {
         $counter +=1;
         $comid = $row['id'];

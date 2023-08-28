@@ -1,12 +1,14 @@
 <?php
 //ini_set('display_errors',1);
 //error_reporting(E_ALL);
-if (!$csbl_db){die('Database error: ' . mysql_error());}
+require_once 'db.php';
+$db = connect_db();
+
 $post = (int)@$_GET['id'];
 /*Кол-во страниц*/
-$counter = mysql_query('SELECT COUNT(`id`) FROM `blog` WHERE `real` = "0" AND `type`="thread"');
-$counter = mysql_fetch_array($counter);
-$pages   = intval(($counter[0] - 1) / $papa) + 1;
+$counter = $db->query('SELECT COUNT(`id`) as c FROM `blog` WHERE `real` = "0" AND `type`="thread"')
+->fetch_assoc()['c'] - 1;
+$pages   = intval($counter / $papa) + 1;
 if (isset($_GET['page']) and !$_GET['id']){
     $page = preg_replace("/[^\w\x7F-\xFF\s]/", "", $_GET['page']);
     $page = (int) $page;
@@ -24,9 +26,9 @@ if (isset($_GET['page']) and !$_GET['id']){
     $sqlquery = ("SELECT * FROM `blog` WHERE `real` = '0' AND `type`='thread' ORDER BY `timestamp` DESC LIMIT $papa");
     $page = 1;
   }
-$results = mysql_query($sqlquery);
-if (mysql_num_rows($results)){
-    while ($row = mysql_fetch_assoc($results)){
+$results = $db->query($sqlquery);
+if ($results->num_rows){
+    while ($row = $results->fetch_assoc()) {
         $posid = $row['id'];
         $rating = $row['rating'];
         $chan   = chan($row['chan']);

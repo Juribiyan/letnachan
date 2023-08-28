@@ -66,7 +66,7 @@ function vote(method, id) {
     $("body").append('<div id="loadbar" class="pr pr-text">\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0430...</div>');
     $.ajax({
         type: "GET",
-        url: "https://" + location.hostname + '/rate.php?id=' + id + '&method=' + method + '&lastthread=' + $('span[class="info"] span').eq(1).attr('id') + '&posts=' + $('.info').length,
+        url: '/rate.php?id=' + id + '&method=' + method + '&lastthread=' + $('span[class="info"] span').eq(1).attr('id') + '&posts=' + $('.info').length,
         success: function (data) {
             var obj = jQuery.parseJSON(data);
             $('#' + id).fadeIn(500).html(obj.num);
@@ -105,7 +105,7 @@ $(function () {/*AJAX-постинг новости*/
                 $('#loadbar').addClass('success').html(obj.response);
                 $("#loadbar").delay(1000).fadeOut('slow', function () {
                     $(this).remove();
-                    window.location = "https://" + location.hostname + "/news?id=" + obj.id;
+                    window.location = "/news?id=" + obj.id;
                 });
             } else {
                 //noinspection JSJQueryEfficiency
@@ -228,7 +228,7 @@ function getcomms() {
         //}
         $.ajax({
             type: "GET",
-            url: "api/cupdate.php",
+            url: "/api/cupdate.php",
             data: {
                 "id": thread,
                 "lastid": lastid
@@ -253,7 +253,7 @@ function getcomms() {
 function getonline(){
     $.ajax({
         type: "GET",
-        url: "https://" + location.hostname + "/api/oupdate.php",
+        url: /*"https://" + location.hostname + */"/api/oupdate.php",
         data: {
             "online": $('linenum').html(),
             "was":$('totalnum').html()
@@ -266,7 +266,7 @@ function getonline(){
         }
     })
 }
-function initplexor() {
+/*function initplexor() {
     var rateCommUpd = function (result, id, cursor) {
         var obj = result;
         if (obj['rate']) {
@@ -287,7 +287,8 @@ function initplexor() {
         url: 'https://psh.lentachan.ru',
         namespace: 'main'
     }) .setCursor('updater', 0).subscribe('updater', rateCommUpd).execute();
-}
+}*/
+
 /*function rateupdate() {
  $('#loadbar').remove();
  counter = 1;
@@ -321,7 +322,7 @@ function init(){
     getnews();
     getcomms();
     getonline();
-    initplexor()
+    // initplexor()
 }
 $(document).ready(function() {
     init();

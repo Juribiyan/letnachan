@@ -2,7 +2,7 @@
 //ini_set('display_errors',1);
 //error_reporting(E_ALL);
  $_SESSION['bot'] = false;
-if (!$csbl_db){die('Database error: ' . mysql_error());}
+
 $post = (int) @$_GET['id'];
 $post_cate = preg_replace("/[^\w\x7F-\xFF\s]/", "", @$_GET['cate']);
 
@@ -19,9 +19,9 @@ if($post_cate){
   $sql_cate = "`real` = '1'";
 }
 /*Кол-во страниц*/
-$counter = mysql_query('SELECT COUNT(`id`) FROM `blog` WHERE '.$sql_cate.'AND `type`="thread"');
-$counter = mysql_fetch_array($counter);
-$pages   = intval(($counter[0] - 1) / $papa) + 1;
+$counter = $db->query('SELECT COUNT(`id`) as bc FROM `blog` WHERE '.$sql_cate.'AND `type`="thread"')
+->fetch_assoc()['bc'] - 1;
+$pages   = intval($counter / $papa) + 1;
 if (isset($_GET['page']) and !$_GET['id']){
     $page = preg_replace("/[^\w\x7F-\xFF\s]/", "", $_GET['page']);
     $page = (int) $page;
@@ -39,9 +39,9 @@ if (isset($_GET['page']) and !$_GET['id']){
     $sqlquery = ("SELECT * FROM `blog` WHERE $sql_cate AND `type`='thread' ORDER BY `timestamp` DESC LIMIT $papa");
     $page = 1;
   }
-$results = mysql_query($sqlquery);
-if (mysql_num_rows($results)){
-    while ($row = mysql_fetch_assoc($results)){
+$results = $db->query($sqlquery);
+if ($results->num_rows){
+    while ($row = $results->fetch_assoc()) {
         $posid = $row['id'];
         $rating = $row['rating'];
         $chan   = chan($row['chan']);
@@ -78,9 +78,8 @@ EOT;
     }
 
     if($post) { /*А так же комментарии, если есть потребность.*/
-      $comments = ("SELECT * FROM `blog` WHERE `parrent` = $post AND `type`='post' ORDER BY `timestamp` ASC");
-      $comments = mysql_query($comments);
-        while ($row = mysql_fetch_assoc($comments)) {
+      $comments = $db->query("SELECT * FROM `blog` WHERE `parrent` = $post AND `type`='post' ORDER BY `timestamp` ASC");
+        while ($row = $comments->fetch_assoc()) {
           @$lastid = $row['id'];
           $comid = $row['id'];
           $comtext = stripslashes($row['message']);

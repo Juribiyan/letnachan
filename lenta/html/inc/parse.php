@@ -1,6 +1,10 @@
 <?php
 mb_internal_encoding('UTF-8');
 mb_regex_encoding('UTF-8');
+
+/*require_once '../db.php';
+$db = connect_db();*/
+
 function MakeURL($string)
 {
     $string = preg_replace('#(http://|https://|ftp://|irc://)([^(\s<|\[)]*)#', '<a target="_blank" href="\\1\\2">\\1\\2</a>', $string);
@@ -43,10 +47,12 @@ function BBCode($string)
 }
 function postRef($matches)
 {
+    global $db; 
+
     $id =& $matches[2];
-    $result = mysql_query("SELECT `parrent` FROM `blog` WHERE `id` = $id");
+    $result = $db->query("SELECT `parrent` FROM `blog` WHERE `id` = $id");
     if ($result) {
-        while ($post = mysql_fetch_assoc($result)) {
+        while ($post = $result->fetch_assoc()) {
             $par = $post['parrent'];
         }
     }

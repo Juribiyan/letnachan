@@ -2,11 +2,10 @@
 include '../engine.php';
 include '../inc/func/stringformatting.php';
 $idcom    = (int) $_POST['id'];
-$comments   = ("SELECT * FROM `blog` WHERE `id` = $idcom");
-$comments   = mysql_query($comments);
-if (mysql_num_rows($comments)>0)
+$comments   = $db->query("SELECT * FROM `blog` WHERE `id` = $idcom");
+if ($comments->num_rows > 0)
 {
-    while ($row = mysql_fetch_assoc($comments))
+    while ($row = $comments->fetch_assoc())
     {
           $comid = $row['id'];
           $comtext = stripslashes($row['message']);

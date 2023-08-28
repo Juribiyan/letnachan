@@ -2,7 +2,7 @@
 require_once '../engine.php';
 require_once '../inc/func/stringformatting.php';
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) AND $_SERVER['HTTP_REFERER']!=$li_URL.'/random') {
-exit('Что ищешь тут ты?');
+    exit('Что ищешь тут ты?');
 } 
 $lastid = (int)$_GET['lastid'];
 $finish = time() + 50;
@@ -27,9 +27,8 @@ if ($lastid == $count)
 }
 else
 {
-$sql = "SELECT * FROM `blog` where `real` = '0' and `type`='thread' and `id`>$lastid ORDER BY `timestamp` DESC LIMIT 10";
-$sql   = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($sql)){
+$res = $db->query("SELECT * FROM `blog` where `real` = '0' and `type`='thread' and `id`>$lastid ORDER BY `timestamp` DESC LIMIT 10");
+    while ($row = $res->fetch_assoc()){
         $posid = $row['id'];
         $rating = $row['rating'];
         $chan   = chan($row['chan']);

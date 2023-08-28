@@ -42,7 +42,8 @@ require_once 'inc/func.php';
         if (isset($_GET['id']))
         {
             $id    = (int) $_GET['id'];
-            $title = mysql_fetch_assoc(mysql_query("SELECT subject,category FROM blog WHERE id = $id"));
+            $title = $db->query("SELECT subject,category FROM blog WHERE id = $id")
+            ->fetch_assoc();
             if (!empty($title['category'])){
                 switch ($title['category']){
                     case 'aib': $title['category']='Новости АИБ'; break;
@@ -64,7 +65,7 @@ require_once 'inc/func.php';
     <link rel="shortcut icon" href="<?= $li_URL; ?>/favicon.ico">
     <script src="/js/jquery-latest.min.js"></script>
     <script src="/js/jquery-common.js"></script>
-    <script src="/js/jquery-realplexor.js"></script>
+    <!--script src="/js/jquery-realplexor.js"></script-->
     <script src="/js/lentach.js"></script>
 </head>
 <body>
