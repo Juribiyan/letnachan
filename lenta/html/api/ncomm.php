@@ -24,7 +24,7 @@ var_dump((isset($_SESSION['security_code']) && isset($_SESSION['security_code'])
 $contents = ob_get_contents();
 ob_end_clean();
 error_log($contents);
-$okay = $time - $wipe;
+$okay = @$wipe ? ($time-$wipe) : WIPE_TIMEOUT_COMM+1;
 //Капчачек:
 if ((isset($_SESSION['security_code']) && isset($_SESSION['security_code']) && $_SESSION['security_code'] == $_POST['captcha']) == FALSE) {
     unset($_SESSION['security_code']);
@@ -41,12 +41,12 @@ if ($validator->ValidateForm())
     $messcheck = preg_replace('/\n(\s*\n)+/', "\n\n", $_POST['message']); #Выпиливаем пустые строки из комментария
     $message   = $db->real_escape_string(MarkPost(mb_substr(limitlines($messcheck, 7), 0, 1024))); # Текст комментария
     $isitcomment = $db->query("SELECT  `type` FROM  `blog` WHERE  `id` = '$parrent'")->fetch_array();
-    /*if ($okay < 5 or $ip != "1307118148") {
+    if ($okay < WIPE_TIMEOUT_COMM/* or $ip != "1307118148"*/) {
         exit(json_encode(array(
             'code' => '403',
             'response' => 'Упырьте мел.',
         )));
-    } else */{
+    } else {
         if ($isitcomment['type'] == 'thread') {
             if (isset($_POST['captcha']) and !empty($_POST['captcha'])) {
                 $db->query("INSERT INTO `blog` SET `message`='$message', `timestamp`='$time', `type`='post',`parrent`='$parrent',`ip`='$ip',`ch`='1'");

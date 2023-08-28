@@ -13,7 +13,7 @@ $result=$db->query("SELECT * FROM `blog` WHERE `ip`='$ip' ORDER BY id DESC LIMIT
   while($row = $result->fetch_array()){
     $wipe=$row['timestamp'];
 }
-$okay = $time-$wipe;
+$okay = @$wipe ? ($time-$wipe) : WIPE_TIMEOUT_NEWS+1;
 ob_start();
 echo "sec code:" . $_SESSION['security_code'];
 var_dump($_POST['captcha']);
@@ -28,12 +28,13 @@ if ((isset($_SESSION['security_code']) && isset($_SESSION['security_code'])  && 
   postError('Неверная капча!');
 } 
 unset($_SESSION['security_code']);
-/*if ($okay < 60 or $ip != "1307118148") {
-	       exit(json_encode(array(
-              'code' => '403',
-              'response' => 'Упырьте мел.',
-          )));
-} else*/ {
+if ($okay < WIPE_TIMEOUT_NEWS/* or $ip != "1307118148"*/) {
+  exit(json_encode(array(
+    'code' => '403',
+    'response' => 'Упырьте мел.',
+    'ip' => $ip
+  )));
+} else {
     //Настраиваем параметры валидации
     $validator = new FormValidator();
     $validator->addValidation("title", "minlen=3", "Длина заголовка должна быть больше 3 символов");

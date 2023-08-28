@@ -7,3 +7,6 @@ define('DB_CHARSET', 'utf8mb4');
 define('DB_COLLATION', 'utf8mb4_unicode_ci');
 
 mb_internal_encoding('UTF-8');
+
+define('WIPE_TIMEOUT_NEWS', 60);
+define('WIPE_TIMEOUT_COMM', 5);
