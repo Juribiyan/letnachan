@@ -49,6 +49,8 @@ else
 EOT;
     }
     echo '<count id="'.$counter.'"></count>';
-    echo '<id id="'.$comid.'"></id>';
+    if (@$comid) {
+        echo '<id id="'.$comid.'"></id>';
+    }
 }
 ?>
