@@ -33,7 +33,7 @@ CREATE TABLE `blog` (
   `subject` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
   `message` text COLLATE utf8_unicode_ci NOT NULL,
   `fullmessage` text COLLATE utf8_unicode_ci NOT NULL,
-  `rating` int(11) NOT NULL,
+  `rating` int(11) NULL DEFAULT '0',
   `timestamp` int(12) NOT NULL,
   `chan` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `link` text COLLATE utf8_unicode_ci NOT NULL,
