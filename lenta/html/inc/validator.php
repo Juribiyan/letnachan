@@ -1,5 +1,5 @@
 <?PHP
-class Object
+class Obj
     {
     var $variable_name;
     var $validator_string;
@@ -21,7 +21,7 @@ class FormValidator
         }
     function addValidation($variable, $validator, $error)
         {
-        $validator_obj                   = new Object();
+        $validator_obj                   = new Obj();
         $validator_obj->variable_name    = $variable;
         $validator_obj->validator_string = $validator;
         $validator_obj->error_string     = $error;
