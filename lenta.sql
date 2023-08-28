@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `blog` (
   `id` int(11) NOT NULL,
-  `subject` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
+  `subject` varchar(70) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `message` text COLLATE utf8_unicode_ci NOT NULL,
   `fullmessage` text COLLATE utf8_unicode_ci NOT NULL,
   `rating` int(11) NULL DEFAULT '0',
