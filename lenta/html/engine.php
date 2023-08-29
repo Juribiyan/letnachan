@@ -58,47 +58,6 @@ function errorMsg($string)
 	}
 	return $string;
 }
-function chan($chans)
-{
-	switch ($chans) {
-		case 'Анонимус':
-			$chan = 'anon.png';
-			break;
-		case 'Двач':
-			$chan = '2ch.gif';
-			break;
-		case '0chan':
-			$chan = '0chan.gif';
-			break;
-		case 'Ычан':
-			$chan = 'iichan.gif';
-			break;
-		case 'Доброчан':
-			$chan = 'dobrochan.gif';
-			break;
-		case '4chan':
-			$chan = '4chan.png';
-			break;
-		case 'Оланет':
-			$chan = 'olanet.png';
-			break;
-		case 'ВКонтакте':
-			$chan = 'vk.ico';
-			break;
-		case '1chan.ru':
-			$chan = '1chan.png';
-			break;
-		case 'ICQ':
-			$chan = 'icq.png';
-			break;
-		case 'Lenta':
-			$chan = 'lenta.png';
-			break;
-		default:
-			$chan = 'no.png';
-	}
-	return $chan;
-}
 function whatcat($category)
 {
 	switch ($category) {

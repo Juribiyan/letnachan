@@ -479,3 +479,44 @@ span.yobka {
 	font-style: italic;
 	color: #789922;
 }
+
+/* Fancy homeboard selector */
+.add-block label {
+   display: inline-block;
+   position: relative;
+   
+}
+.add-block input[type=radio]::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.add-block input[type=radio] {
+    height: 0;
+    width: 0;
+    margin: 0;
+}
+.add-block label img {
+    pointer-events: none;
+    filter: grayscale(1);
+    z-index: 1;
+    position: relative;
+    margin: 4px 5px 1px 1px;
+}
+.add-block input[type=radio]:checked + img,
+.add-block:hover label img {
+    filter: none;
+}
+.add-block input[type=radio]:checked::before {
+    box-shadow: inset 0 0 0 1px #b73300f2;
+}
+.add-block label:hover input[type=radio]::before,
+.add-block input[type=radio]:checked::before {
+    background: #00000033;
+}

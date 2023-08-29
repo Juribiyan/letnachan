@@ -37,20 +37,19 @@
 	</div>
 	<div class="add-block">
 		<h2>Принадлежность:</h2>
-		<select name="chan" class="block-option">
-			<option>Нет</option>
-			<option value="Анонимус">Анонимус</option>
-			<option value="Двач">Два.Ч</option>
-			<option value="0chan">Øchan</option>
-			<option value="Ычан">Ычан</option>
-			<option value="Доброчан">Доброчан</option>
-			<option value="1chan.ru">1chan.ru</option>
-			<option value="Оланет">Оланет</option>
-			<option value="4chan">4chan</option>
-			<option value="Lenta">Лента.ру</option>
-			<option value="ICQ">ICQ</option>
-			<option value="ВКонтакте">ВКонтакте</option>
-		</select>
+		<label title="Нет">
+			<input type="radio" name="chan" checked>
+			<img src="<?= ROOT_URL ?>/images/lentachan.png" alt="Нет">
+		</label>
+		<?php require_once 'custom/homeboards.php';
+		foreach($homeboards as $brd_id => $brd): ?>
+			<?php if (!@$brd['disabled']): ?>
+			<label title="<?= $brd['name'] ?>">
+				<input type="radio" name="chan" value="<?= $brd_id ?>">
+				<img src="<?= ROOT_URL . '/images/' . $brd['icon'] ?>" alt="<?= $brd_id ?>">
+			</label>
+			<?php endif;?>
+		<?php endforeach; ?>
 	</div>
 	<div class="add-block">
 		<h2>Капча:</h2>

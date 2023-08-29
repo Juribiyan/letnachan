@@ -28,12 +28,14 @@ if (isset($_GET['page']) and !$_GET['id']){
     $sqlquery = ("SELECT * FROM `blog` WHERE `real` = '0' AND `type`='thread' ORDER BY `timestamp` DESC LIMIT $papa");
     $page = 1;
   }
+require_once 'custom/homeboards.php';
 $results = $db->query($sqlquery);
 if ($results->num_rows){
     while ($row = $results->fetch_assoc()) {
         $posid = $row['id'];
         $rating = $row['rating'];
-        $chan   = chan($row['chan']);
+        $homebrd = @$homeboards[$row['chan']];
+        $chan   = $homebrd ? $homebrd['icon'] : 'no.png';
         $name   = stripslashes($row['subject']);
         $text   = stripslashes($row['message']);
         $text2  = stripslashes($row['fullmessage']);
