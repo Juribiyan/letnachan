@@ -84,3 +84,28 @@ function countcoms($thread)
 	->fetch_assoc();
 	return $countcom['cc'];
 }
+
+function clientBroadcast($channel, $event, $data=null) {
+	$payload = [
+		'channel' => $channel,
+		'event' => $event,
+		'token' => SOCKETIO_SRV_TOKEN
+	];
+	if ($data) {
+		$payload['data'] = $data;
+	}
+	$data_json = json_encode($payload);
+
+	$curl_session = curl_init(SOCKETIO_HOST . ':' . SOCKETIO_PORT . '/broadcast/');
+	curl_setopt($curl_session, CURLOPT_PROXY, "");
+	curl_setopt($curl_session, CURLOPT_POSTFIELDS, $data_json);
+	curl_setopt($curl_session, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($curl_session, CURLOPT_HTTPHEADER, [
+		'Content-Type: application/json',
+		'Content-Length: ' . strlen($data_json)
+	]);
+	curl_exec($curl_session);
+	if (curl_errno($curl_session)) {
+		die('cURL error: ' . curl_error($curl_session));
+	}
+}
