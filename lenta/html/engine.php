@@ -20,9 +20,6 @@ error_log($contents); */
 require_once 'db.php';
 $db = connect_db();
 
-// $li_URL = "https://lentachan.ru"; // Няшный адерс  # Прошу без слеша в конце
-$li_URL = "";
-
 $papa = '10'; // Записей на страницу
 $li_winnews = '';
 // $pushserver = 'https://psh.lentachan.ru';

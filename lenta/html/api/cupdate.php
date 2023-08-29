@@ -1,11 +1,7 @@
 <?php
 require_once '../engine.php';
 require_once '../inc/func/stringformatting.php';
-/*if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) AND $_SERVER['HTTP_REFERER']!=$li_URL.'/random') {
-exit('Что ищешь тут ты?');
-} 
- * 
- */
+
 $thread     = (int) $_GET['id'];
 $lastid = (int) $_GET['lastid'];
 $finish = time() + 50;

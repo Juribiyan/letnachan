@@ -3,6 +3,8 @@
 //error_reporting(E_ALL);
  $_SESSION['bot'] = false;
 
+$li_URL = ROOT_URL; // Слишком лень ковыряться в кавычках
+
 $post = (int) @$_GET['id'];
 $post_cate = preg_replace("/[^\w\x7F-\xFF\s]/", "", @$_GET['cate']);
 

@@ -1,9 +1,10 @@
 <?php
 require_once '../engine.php';
 require_once '../inc/func/stringformatting.php';
-if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) AND $_SERVER['HTTP_REFERER']!=$li_URL.'/random') {
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) AND parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) != '/random') {
     exit('Что ищешь тут ты?');
 } 
+$li_URL = ROOT_URL; // Слишком лень ковыряться в кавычках
 $lastid = (int)$_GET['lastid'];
 $finish = time() + 50;
 $count = @fread(fopen("lastid","r"),filesize("lastid")); 

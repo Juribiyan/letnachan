@@ -12,4 +12,6 @@ define('SITE_SUBTITLE', 'Новости имиджборд');
 define('WIPE_TIMEOUT_NEWS', 60);
 define('WIPE_TIMEOUT_COMM', 5);
 
+define('ROOT_URL', ''); // внешний адрес сайта (в большинстве случаев лучше оставить пустым)
+
 mb_internal_encoding('UTF-8');

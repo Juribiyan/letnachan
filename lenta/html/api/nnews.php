@@ -4,8 +4,8 @@ require_once '../engine.php';
 require_once '../inc/parse.php';
 require_once '../inc/validator.php';
 mb_internal_encoding("UTF-8");
-if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) AND $_SERVER['HTTP_REFERER']!=$li_URL.'/add') {
-  exit('Чего ты пытаешься добиться?');
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) AND parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) != '/add') {
+  exit('Чего ты пытаешься долбиться?');
 }
 $time = time(); # Время
 $ip   = ip2long($_SERVER['REMOTE_ADDR']); # IP

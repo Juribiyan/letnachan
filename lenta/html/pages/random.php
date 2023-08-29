@@ -4,6 +4,8 @@
 require_once 'db.php';
 $db = connect_db();
 
+$li_URL = ROOT_URL; // Слишком лень ковыряться в кавычках
+
 $post = (int)@$_GET['id'];
 /*Кол-во страниц*/
 $counter = $db->query('SELECT COUNT(`id`) as c FROM `blog` WHERE `real` = "0" AND `type`="thread"')

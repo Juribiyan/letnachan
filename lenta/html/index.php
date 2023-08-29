@@ -50,7 +50,7 @@ require_once 'inc/func.php';
     <meta name="description" content="Новостной ресурс АИБ">
     <meta name="keywords" content="Лентачан, лентач, лента-чан, Новости">
     <link rel="stylesheet" href="/min/index.php?&amp;g=c&amp;8" type="text/css">
-    <link rel="shortcut icon" href="<?= $li_URL; ?>/favicon.ico">
+    <link rel="shortcut icon" href="<?= ROOT_URL ?>/favicon.ico">
     <script src="/js/jquery-latest.min.js"></script>
     <script src="/js/jquery-common.js"></script>
     <!--script src="/js/jquery-realplexor.js"></script-->
@@ -111,7 +111,7 @@ require_once 'inc/func.php';
         <div class="header-add">
             <span>Читают <linenum><?php require_once 'api/online.php'; ?></linenum>, сегодня было <totalnum><?=$wasonline?></totalnum></span>
             <a href="/add">Добавить новость</a></div>
-        <span class="logo"><a href="<?= $li_URL; ?>"><img src="<?= $li_URL; ?>/images/logo.png" alt="logo" id="logo"></a></span>
+        <span class="logo"><a href="<?= ROOT_URL ?>"><img src="<?= ROOT_URL ?>/images/logo.png" alt="logo" id="logo"></a></span>
 		<span class="datetime">
 			<span id="timeto"></span>			
 		</span>
@@ -137,7 +137,7 @@ require_once 'inc/func.php';
 
     <div class="footerline">
         Сделал <i>лента-кун</i>, все права принадлежат анону. <br>
-        <span><a href="<?= $li_URL; ?>/contact">Контакты</a> | <a href="<?= $li_URL; ?>/rules">Правила</a> | <a href="<?= $li_URL; ?>/help">Помощь</a> | RSS: <a href="<?= $li_URL; ?>/rss/">Все</a> <a href="<?= $li_URL; ?>/rss/?cate=news">Одобренные</a> <a href="<?= $li_URL; ?>/rss/?cate=random",>Рандом</a></span>
+        <span><a href="<?= ROOT_URL ?>/contact">Контакты</a> | <a href="<?= ROOT_URL ?>/rules">Правила</a> | <a href="<?= ROOT_URL ?>/help">Помощь</a> | RSS: <a href="<?= ROOT_URL ?>/rss/">Все</a> <a href="<?= ROOT_URL ?>/rss/?cate=news">Одобренные</a> <a href="<?= ROOT_URL ?>/rss/?cate=random",>Рандом</a></span>
         <a id="bottom"></a>
     </div>
 </div>
