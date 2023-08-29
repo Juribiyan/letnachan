@@ -13,30 +13,19 @@ require_once 'inc/func.php';
         $title = SITE_TITLE . ': ' . SITE_SUBTITLE;
         $url = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $url = parse_url($url);
-
-        if ($url['path'] == '/random'){
-            $title = 'Все новости';
-        }
-        if ($url['path'] == '/add'){
-            $title = 'Добавление новости';
-        }
-        if ($url['path'] == '/help'){
-            $title = 'Помощь';
-        }
-        if ($url['path'] == '/rules'){
-            $title = 'Правила';
-        }
-        if ($url['path'] == '/contact'){
-            $title = 'Контакты';
-        }
-	
-        else{
-            switch ($url['path']){
-                case '/news/aib/': $title='Новости АИБ'; break;
-                case '/news/irl/': $title='Новости ИРЛ'; break;
-                case '/news/int/': $title='Новости Интернета'; break;
-                case '/news/all/': $title='Обсуждение'; break;
-            }
+        $path_map = [
+            '/random' => 'Все новости',
+            '/add' => 'Добавление новости',
+            '/help' => 'Помощь',
+            '/rules' => 'Правила',
+            '/contact' => 'Контакты',
+            '/news/aib/' => 'Новости АИБ',
+            '/news/irl/' => 'Новости ИРЛ',
+            '/news/int/' => 'Новости Интернета',
+            '/news/all/' => 'Обсуждение'
+        ];
+        if (@$path_map[$url['path']]) {
+            $title = $path_map[$url['path']];
         }
         if (isset($_GET['id']))
         {
