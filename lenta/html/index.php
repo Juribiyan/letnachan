@@ -72,36 +72,20 @@ require_once 'inc/func.php';
         <div class="left-links">
             <h2 class="title">Имиджборды</h2>
             <hr>
+            <?php require_once 'custom/links.php';
+            foreach($imageboards as $link): ?>
             <div class="category">
-                <img src="<?= $li_URL; ?>/images/iichan.gif" alt class="icon"> <a href="https://iichan.hk/" rel="nofollow" target="_blank">IIchan</a>
+                <img src="<?= ROOT_URL ?>/images/<?= $link['icon'] ?>" alt class="icon"> <a href="<?= $link['url'] ?>" rel="nofollow" target="_blank"><?= $link['name'] ?></a>
             </div>
-            <div class="category">
-                <img src="<?= $li_URL; ?>/images/dobrochan.gif" alt class="icon"> <a href="http://dobrochan.org/" rel="nofollow" target="_blank">Доброчан</a>
-            </div>
-            <div class="category">
-                <img src="<?= $li_URL; ?>/images/0chan.gif" alt class="icon"> <a href="http://0chan.one/" rel="nofollow" target="_blank">Øchan.one</a>
-            </div>
-            <div class="category">
-                <img src="<?= $li_URL; ?>/images/2ch.hk.gif" alt class="icon"> <a href="https://2ch.hk/" rel="nofollow" target="_blank">2ch.hk</a>
-            </div>
+            <?php endforeach; ?>
             <hr>
             <h2 class="title">Другое</h2>
             <hr>
+            <?php foreach($other_links as $link): ?>
             <div class="category">
-                <img src="<?= $li_URL; ?>/images/overchan.gif" alt class="icon"> <a href="http://overchan.ru/" rel="nofollow" target="_blank">overchan</a>
+                <img src="<?= ROOT_URL ?>/images/<?= $link['icon'] ?>" alt class="icon"> <a href="<?= $link['url'] ?>" rel="nofollow" target="_blank"><?= $link['name'] ?></a>
             </div>
-            <div class="category">
-                <img src="<?= $li_URL; ?>/images/metachan.ico" alt class="icon"> <a href="http://metachan.ru/" rel="nofollow" target="_blank">metachan</a>
-            </div>
-            <div class="category">
-                <img src="<?= $li_URL; ?>/images/1chan.png" alt class="icon"> <a href="https://1chan.ru/news/" rel="nofollow" target="_blank">1chan.ru</a>
-            </div>
-            <div class="category">
-                <img src="<?= $li_URL; ?>/images/1chan.ca.gif" alt class="icon"> <a href="https://1chan.ca/news/" rel="nofollow" target="_blank">1chan.ca</a>
-            </div>
-            <div class="category">
-                <img src="<?= $li_URL; ?>/images/1chan.pl.png" alt class="icon"> <a href="https://1chan.pl/news/" rel="nofollow" target="_blank">1chan.pl</a>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </div>

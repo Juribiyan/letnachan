@@ -1,0 +1,51 @@
+<?php
+$imageboards = [
+	[
+		'name'=>'IIchan',
+		'url'=>'https://iichan.hk/',
+		'icon'=>'iichan.gif'
+	],
+	[
+		'name'=>'Доброчан',
+		'url'=>'http://dobrochan.org/',
+		'icon'=>'dobrochan.gif'
+	],
+	[
+		'name'=>'Øchan.one',
+		'url'=>'http://0chan.one/',
+		'icon'=>'0chan.gif'
+	],
+	[
+		'name'=>'2ch.hk',
+		'url'=>'https://2ch.hk/',
+		'icon'=>'2ch.hk.gif'
+	]
+];
+
+$other_links = [
+	[
+		'name'=>'overchan',
+		'url'=>'http://overchan.ru/',
+		'icon'=>'overchan.gif'
+	],
+	[
+		'name'=>'metachan',
+		'url'=>'http://metachan.ru//',
+		'icon'=>'metachan.ico'
+	],
+	[
+		'name'=>'1chan.ru',
+		'url'=>'https://1chan.ru/news/',
+		'icon'=>'1chan.png'
+	],
+	[
+		'name'=>'1chan.ca',
+		'url'=>'https://1chan.ca/news/',
+		'icon'=>'1chan.ca.gif'
+	],
+	[
+		'name'=>'1chan.pl',
+		'url'=>'https://1chan.pl/news/',
+		'icon'=>'1chan.pl.png'
+	]
+];
