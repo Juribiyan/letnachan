@@ -49,7 +49,7 @@ require_once 'inc/func.php';
         ?></title>
     <meta name="description" content="Новостной ресурс АИБ">
     <meta name="keywords" content="Лентачан, лентач, лента-чан, Новости">
-    <link rel="stylesheet" href="/min/index.php?&amp;g=c&amp;8" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
     <link rel="shortcut icon" href="<?= ROOT_URL ?>/favicon.ico">
     <script src="/js/jquery-latest.min.js"></script>
     <script src="/js/jquery-common.js"></script>
