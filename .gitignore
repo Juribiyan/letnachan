@@ -7,3 +7,6 @@ lenta/html/api/comms/*
 Backup * of *
 /favicon.ico
 lenta/logs/error.log
+lenta/html/custom/links.php
+lenta/html/custom/homeboards.php
+CHANGES
