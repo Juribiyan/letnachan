@@ -232,7 +232,7 @@ function onlineUpdate({was, now} = {}) {
     $('totalnum').text(was)
 }
 
-$(document).ready(function() {
+function init_updates() {
     let socketOK = socket.init()
     if (!socketOK) return;
     // Subscribe to updates of the online counter
@@ -249,6 +249,10 @@ $(document).ready(function() {
     }
     // Subscribe to rating and comment count updates
     entryStats.update()
-    // Simply fucking ping online updates
+}
+
+$(document).ready(function() {
+    init_updates()
+     // Simply fucking ping online updates
     setInterval(() => $.get('/api/online.php'), 1000 * 60)
 });
