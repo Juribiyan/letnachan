@@ -1,12 +1,8 @@
 Nginx_*_vhost.conf*
 /lenta/html/config.php
-lenta/html/api/lastid
-lenta/html/api/online
-lenta/html/api/was
-lenta/html/api/comms/*
 Backup * of *
 /favicon.ico
-lenta/logs/error.log
+lenta/logs/*
 lenta/html/custom/links.php
 lenta/html/custom/homeboards.php
 CHANGES

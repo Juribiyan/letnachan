@@ -14,4 +14,9 @@ define('WIPE_TIMEOUT_COMM', 5);
 
 define('ROOT_URL', ''); // внешний адрес сайта (в большинстве случаев лучше оставить пустым)
 
+// настройки подключения к socket.io (должны совпадать со значениями в /scripts/pipe/.env)
+define('SOCKETIO_HOST', '127.0.0.1');
+define('SOCKETIO_PORT', '9393');
+define('SOCKETIO_SRV_TOKEN', '<any_random_shit>');
+
 mb_internal_encoding('UTF-8');

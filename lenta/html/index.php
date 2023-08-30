@@ -53,7 +53,7 @@ require_once 'inc/func.php';
     <link rel="shortcut icon" href="<?= ROOT_URL ?>/favicon.ico">
     <script src="/js/jquery-latest.min.js"></script>
     <script src="/js/jquery-common.js"></script>
-    <!--script src="/js/jquery-realplexor.js"></script-->
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/lentach.js"></script>
 </head>
 <body>

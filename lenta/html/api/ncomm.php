@@ -3,7 +3,6 @@ session_start();
 require_once '../engine.php';
 require_once '../inc/parse.php';
 require_once '../inc/validator.php';
-// require_once "../Dklab/Realplexor.php";
 mb_internal_encoding("UTF-8");
 $request = parse_url($_SERVER['HTTP_REFERER']);
 if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest' and $request['path'] !== 'news') {
@@ -50,10 +49,39 @@ if ($validator->ValidateForm())
         if ($isitcomment['type'] == 'thread') {
             if (isset($_POST['captcha']) and !empty($_POST['captcha'])) {
                 $db->query("INSERT INTO `blog` SET `message`='$message', `timestamp`='$time', `type`='post',`parrent`='$parrent',`ip`='$ip',`ch`='1'");
-                @$insertid = $db->insert_id;
+                @$id = $db->insert_id;
             } else {
                 $db->query("INSERT INTO `blog` SET `message`='$message', `timestamp`='$time', `type`='post',`parrent`='$parrent',`ip`='$ip'");
-                @$insertid = $db->insert_id;
+                @$id = $db->insert_id;
+            }
+            // -------------- Broadcast time! --------------
+            require_once '../inc/func/stringformatting.php';
+            $message = stripslashes($message);
+            $comtime = formatDate($time);
+            $content = <<<EOT
+<a id="{$id}"></a>
+<div class="comment new" id="comment{$id}">
+  <div class="comment-info">{$comtime} <a id="href" onclick="javascript:insert('&gt;&gt;{$id}');return false;">№{$id}</a></div>
+  <div class="comment-text">
+    <p>{$message}</p>
+  </div>
+</div>
+EOT;
+            clientBroadcast("comms:$parrent", 'new-comment', [
+                'id' => $id,
+                'content' => preg_replace('~[\r\n]+~', '', $content)
+            ]);
+            // Broadcast comment count
+            $cc = @$db->query(
+               "SELECT COUNT(*) AS cc 
+                FROM `blog`
+                WHERE `parrent`='$parrent'")
+            ->fetch_assoc()['cc'];
+            if ($cc) {
+                clientBroadcast("stats:$parrent", 'comment-count', [
+                    'id' => $parrent,
+                    'count' => $cc
+                ]);
             }
         } else {
             exit(json_encode(array(
@@ -62,7 +90,6 @@ if ($validator->ValidateForm())
             )));
         }
     }
-    fwrite(fopen('comms/' . $parrent, 'w'), $insertid);
     exit(json_encode(array(
         'code' => '200',
         'response' => 'Ваш комментарий добавлен'

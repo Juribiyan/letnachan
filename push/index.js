@@ -29,4 +29,6 @@ io.on('connection', function (socket) {
 	})
 })
 
+console.log(`Listening for broadcast messages @ ${process.env.HOST}:${process.env.PORT} from ${process.env.SRV_IP} having token=${process.env.SRV_TOKEN}`)
+
 server.listen(process.env.PORT, process.env.HOST)

@@ -2,12 +2,14 @@
 $ip = $_SERVER['REMOTE_ADDR'];
 $intip = ip2long($ip);//Преобразуем ойпи в int
 
-require_once 'db.php';
-$db = connect_db();
+// $intip = rand(); // For testing
+
+if (!function_exists('clientBroadcast')) { // when pinged
+    require_once '../engine.php';
+}
 
 if($db->query("SELECT * FROM was WHERE ip=".$intip)->num_rows == 0){
     $db->query("INSERT INTO was (ip) VALUES(".$intip.")");
-    fwrite(fopen('api/was', 'w'), $db->query("SELECT * FROM was")->num_rows);
 }
 //Проверяем, онлайн ли юзер
 $isoline = $db->query("SELECT 1 FROM online WHERE ip=".$intip);
@@ -26,9 +28,15 @@ else
 $db->query("DELETE FROM online WHERE dt<SUBTIME(NOW(),'0 0:1:0')");
 
 // Считаем всех гостей онлайн:
-$totalOnline = $db->query("SELECT COUNT(*) as oc FROM online")->fetch_assoc()['oc'];
+$totalOnline = $db->query("SELECT * FROM online")->num_rows;
+
 // Выводим:
-fwrite(fopen('api/online', 'w'), $totalOnline);
 $wasonline = $db->query("SELECT * FROM was")->num_rows;
 echo $totalOnline;
+
+// Broadcast
+clientBroadcast("global", 'online-update', [
+    'now' => $totalOnline,
+    'was' => $wasonline
+]);
 ?>

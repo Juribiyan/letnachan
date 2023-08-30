@@ -32,10 +32,13 @@ function rape($id, $method)
         $rating = $db->query("SELECT * FROM `blog` WHERE `id`='" . $id . "'")->fetch_assoc();
         $say['response'] = '200';
         $resonance = ($rating['rating'] < 0 ? 'red' : 'green');
-        // $rpl->send(array("updater"), array('rate' => array('id' => $id, 'rating' => $rating['rating'], 'resonance' => $resonance)));
         $say['message']  = 'Ваш голос засчитан';
+        // -------------- Broadcast time! --------------
+        clientBroadcast("stats:$id", 'rating-update', [
+            'id' => $id,
+            'rating' => $new_numbers
+        ]);
         exit(json_encode($say));
-        echo $new_numbers;
     } else {
         $say['message'] = 'Неизвестная ошибка';
         die(json_encode($say));

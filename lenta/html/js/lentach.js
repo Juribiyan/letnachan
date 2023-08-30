@@ -160,103 +160,95 @@ $(function () { /*AJAX-постинг комментариев*/
     });
 });
 
-function getnews() {
-    if (location.pathname == '/random' && location.search == "") {
-        var lastid = $('a[class="link"]')[0].href.substring($('a[class="link"]')[0].href.lastIndexOf('=') + 1);
-        $.ajax({
-            type: "GET",
-            url: "api/nupdate.php",
-            data: {
-                "lastid": lastid
-            },
-            success: function (data) {
-                if (data.substr(0, 1) == '{') {
-                    lastid = data.lastid;
-                } else {
-                    $('.content').prepend(data);
-                    setTimeout(function() {
-                            $('.entry').removeClass('new');
-                        },
-                        3000);
-                }
-                setTimeout("getnews()", 1000)
+const socket = {
+    init: function() {
+        this.socket = io()
+        if (this.socket)
+            return true;
+        console.error('Ошибка подключения к Socket.IO!')
+        return false
+    },
+    subscribe: function(room, event, callback) {
+        if (!this.subscribedTo.includes(room)) {
+            this.socket.emit('subscribe', room)
+            this.subscribedTo.push(room)
+        }
+        if (event && callback) {
+            this.socket.on(event, data => {
+                callback(data)
+            })
+        }
+    },
+    subscribedTo: []
+}
+
+const entryStats = {
+    update: function() {
+        if (! this.initiated) {
+            socket.socket.on('comment-count', data => {
+                let {id, count} = data
+                $(`.entry .link[href="/news?id=${id}"] num`).text(count)
+            })
+            socket.socket.on('rating-update', data => {
+                let {id, rating} = data
+                $(`.entry .rat-com#${id}`).text(rating)
+                .removeClass('red green')
+                .addClass(rating < 0 ? 'red' : 'green')
+            })
+            this.initiated = true
+        }
+        let sub = [], subTo = this.subscribedTo
+        $('.rat-com').each(function() {
+            let id = +(this.id)
+            if (!isNaN(id) && !subTo.includes(id)) {
+                sub.push(`stats:${id}`)
             }
         })
-    }
+        if (sub.length) {
+            socket.subscribe(sub)
+            this.subscribedTo.push(...sub)
+        }
+    },
+    initiated: false,
+    subscribedTo: []
 }
 
-function getcomms() {
-    if (location.pathname == '/news') {
-        var thread = $('#enty').attr('value'),
-            lastid = $('id').attr('id')
-
-        $.ajax({
-            type: "GET",
-            url: "/api/cupdate.php",
-            data: {
-                "id": thread,
-                "lastid": lastid
-            },
-            success: function (data) {
-                if (data.substr(0, 1) == '{') {
-                    lastid = data.lastid;
-                } else {
-                    $('id').after(data);
-                    $('count').remove();
-                    $('id[id="' + lastid + '"]').remove();
-                    setTimeout(function () {
-                            $('.comment').removeClass('new');
-                        },
-                        3000);
-                }
-                setTimeout("getcomms()", 1000)
-            }
-        })
-    }
+function pushNewsEntry({id, content} = {}) {
+    if ($(`.entry .rat-com#${id}`).length) return;
+    $('.content').prepend(content)
+    entryStats.update()
+    setTimeout(() => $(`.entry .rat-com#${id}`).parents('.entry').removeClass('new'), 3000)
+    
 }
 
-function getonline() {
-    $.ajax({
-        type: "GET",
-        url: "/api/oupdate.php",
-        data: {
-            "online": $('linenum').html(),
-            "was":$('totalnum').html()
-        },
-        success: function (data) {
-            var obj = jQuery.parseJSON(data);
-            $('linenum').html(obj.online);
-            $('totalnum').html(obj.was);
-            setTimeout("getonline()", 1000);
-        }
-    })
+function pushNewComment({id, content} = {}) {
+    if ($(`#comment${id}`).length) return;
+    $('#createcomm').before(content)
+    setTimeout(() => $(`#comment${id}`).removeClass('new'), 3000)
 }
 
-/*function initplexor() {
-    var rateCommUpd = function (result, id, cursor) {
-        var obj = result;
-        if (obj['rate']) {
-            $('#' + obj['rate']['id']).fadeOut('slow', function () {
-                $(this).fadeIn(100).removeClass('green').removeClass('red').addClass(obj['rate']['resonance']).html(obj['rate']['rating']);
-            });
-        }
-        if (obj['comm']) {
-            $('#' + obj['comm']['id']).parent().find('num').parent().addClass('discach');
-            setTimeout(function () {
-                $('#' + obj['comm']['id']).parent().find('num').parent().removeClass('discach');
-            }, 3000);
-            $('#' + obj['comm']['id']).parent().find('num').fadeIn('slow').html(obj['comm']['num']);
-        }
-    };
-
-    var realplexor = $.Realplexor({
-        url: 'https://psh.lentachan.ru',
-        namespace: 'main'
-    }) .setCursor('updater', 0).subscribe('updater', rateCommUpd).execute();
-}*/
+function onlineUpdate({was, now} = {}) {
+    $('linenum').text(now)
+    $('totalnum').text(was)
+}
 
 $(document).ready(function() {
-    getnews();
-    getcomms();
-    getonline();
+    let socketOK = socket.init()
+    if (!socketOK) return;
+    // Subscribe to updates of the online counter
+    socket.subscribe('global', 'online-update', onlineUpdate)
+    // Subscribe to new news entries
+    if (location.pathname === '/random' && location.search === "") {
+        socket.subscribe('global', 'new-entry', pushNewsEntry)
+    }
+    // Subscribe to new comments
+    if (location.pathname == '/news') {
+        let entryID = location.search?.match(/id=([0-9]+)/)?.slice(1)
+        if (!entryID) return;
+        socket.subscribe(`comms:${entryID}`, 'new-comment', pushNewComment)
+    }
+    // Subscribe to rating and comment count updates
+    entryStats.update()
+    // Simply fucking ping online updates
+    setInterval(() => $.get('/api/online.php'), 1000 * 60)
 });
