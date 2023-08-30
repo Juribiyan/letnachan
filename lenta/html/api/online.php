@@ -30,6 +30,9 @@ $db->query("DELETE FROM online WHERE dt<SUBTIME(NOW(),'0 0:1:0')");
 // Считаем всех гостей онлайн:
 $totalOnline = $db->query("SELECT * FROM online")->num_rows;
 
+// Удаляем записи за прошлый день
+$db->query("DELETE FROM was WHERE dt<TIMESTAMP(CURDATE())");
+
 // Выводим:
 $wasonline = $db->query("SELECT * FROM was")->num_rows;
 echo $totalOnline;

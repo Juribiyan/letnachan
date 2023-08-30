@@ -94,7 +94,8 @@ CREATE TABLE `users` (
 
 CREATE TABLE `was` (
   `id` int(11) NOT NULL,
-  `ip` int(12) NOT NULL
+  `ip` int(12) NOT NULL,
+  `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
