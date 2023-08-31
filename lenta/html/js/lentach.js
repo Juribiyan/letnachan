@@ -162,11 +162,14 @@ $(function () { /*AJAX-постинг комментариев*/
 
 const socket = {
     init: function() {
-        this.socket = io()
-        if (this.socket)
-            return true;
-        console.error('Ошибка подключения к Socket.IO!')
-        return false
+        try {
+           this.socket = io() 
+           return true;
+        }
+        catch(e) {
+            console.error('Ошибка подключения к Socket.IO!')
+            return false
+        }
     },
     subscribe: function(room, event, callback) {
         if (!this.subscribedTo.includes(room)) {
