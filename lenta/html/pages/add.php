@@ -4,11 +4,11 @@
 <form id="createnews" method="post" action="api/nnews.php">
 	<div class="add-block">
 		<h2>Заголовок:</h2>
-		<input type="text" name="title" style="width:98%" placeholder="Не более <?=$title_lim;?> символов">
+		<input type="text" name="title" placeholder="Не более <?=$title_lim;?> символов">
 	</div>
 	<div class="add-block">
 		<h2>Категория:</h2>
-		<select name="category" class="block-option" style="width:98%">
+		<select name="category" class="block-option">
 			<option value="no">Без категории</option>
 			<option value="aib">Новости АИБ</option>
 			<option value="irl">Новости ИРЛ</option>
@@ -21,16 +21,18 @@
 		<p>
 			Не более 1024 символов
 		</p>
-		<textarea name="text" rows="7" class="add-text" style="width:98%"></textarea>
+		<textarea name="text" rows="7" class="add-text"></textarea>
 		<p>
 			Полный текст (если надо)
 		</p>
-		<textarea name="text2" rows="11" class="add-text" style="width:98%"></textarea>
+		<textarea name="text2" rows="11" class="add-text"></textarea>
 	</div>
 	<div class="add-block">
 		<h2>Ссылка:</h2>
-		<input type="text" name="link" style="width:98%" placeholder="https://lentachan.ru/">
+		<input type="text" name="link" placeholder="https://lentachan.ru/">
 	</div>
+	<?php require_once 'inc/embeds.php'; ?>
+	<script>const embeds = <?= json_encode($embeds) ?></script>
 	<div class="add-block">
 		<h2>Видео YouTube:</h2>
 		<input type="text" name="video" style="width:98%" placeholder="http://www.youtube.com/watch?v=b1WWpKEPdT4">

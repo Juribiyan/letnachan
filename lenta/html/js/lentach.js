@@ -160,6 +160,16 @@ $(function () { /*AJAX-постинг комментариев*/
     });
 });
 
+$(function() {
+    $('.burger').click(function(ev) {
+        ev.stopPropagation()
+        $('body').addClass('menu-shown')
+    })
+    $('.cont-colm').click(function() {
+        $('body').removeClass('menu-shown')
+    })
+})
+
 const socket = {
     init: function() {
         try {
