@@ -86,6 +86,7 @@ function countcoms($thread)
 }
 
 function clientBroadcast($channel, $event, $data=null) {
+	if (DISABLE_SOCKETIO) return;
 	$payload = [
 		'channel' => $channel,
 		'event' => $event,

@@ -9,6 +9,7 @@ require_once 'inc/func.php';
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php
         $title = SITE_TITLE . ': ' . SITE_SUBTITLE;
         $url = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -53,7 +54,7 @@ require_once 'inc/func.php';
     <link rel="shortcut icon" href="<?= ROOT_URL ?>/favicon.ico">
     <script src="/js/jquery-latest.min.js"></script>
     <script src="/js/jquery-common.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <?php if (!DISABLE_SOCKETIO): ?><script src="/socket.io/socket.io.js"></script><?php endif; ?>
     <script src="/js/lentach.js"></script>
 </head>
 <body>
@@ -92,6 +93,7 @@ require_once 'inc/func.php';
 <div class="cont-colm">
     <!--header-->
     <header>
+        <div class="burger" title="Меню"></div>
         <div class="header-add">
             <span>Читают <linenum><?php require_once 'api/online.php'; ?></linenum>, сегодня было <totalnum><?=$wasonline?></totalnum></span>
             <a href="/add">Добавить новость</a></div>

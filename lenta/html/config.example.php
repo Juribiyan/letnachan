@@ -18,5 +18,6 @@ define('ROOT_URL', ''); // внешний адрес сайта (в больши
 define('SOCKETIO_HOST', '127.0.0.1');
 define('SOCKETIO_PORT', '9393');
 define('SOCKETIO_SRV_TOKEN', '<any_random_shit>');
+define('DISABLE_SOCKETIO', false); // Disable client broadcasting for dev purposes
 
 mb_internal_encoding('UTF-8');
