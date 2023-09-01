@@ -555,12 +555,16 @@ span.yobka {
     width: 0;
     margin: 0;
 }
-.add-block label img {
+.hb-img {
     pointer-events: none;
     filter: grayscale(1);
     z-index: 1;
     position: relative;
-    margin: 4px 5px 1px 1px;
+    margin: 4px 5px;
+    display: inline-block;
+    height: 16px;
+    vertical-align: bottom;
+    font-size: 13px;
 }
 .add-block input[type=radio]:checked + img,
 .add-block:hover label img {

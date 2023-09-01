@@ -41,14 +41,14 @@
 		<h2>Принадлежность:</h2>
 		<label title="Нет">
 			<input type="radio" name="chan" checked>
-			<img src="<?= ROOT_URL ?>/images/lentachan.png" alt="Нет">
+			<span class="hb-img">Нет</span>
 		</label>
 		<?php require_once 'custom/homeboards.php';
 		foreach($homeboards as $brd_id => $brd): ?>
 			<?php if (!@$brd['disabled']): ?>
 			<label title="<?= $brd['name'] ?>">
 				<input type="radio" name="chan" value="<?= $brd_id ?>">
-				<img src="<?= ROOT_URL . '/images/' . $brd['icon'] ?>" alt="<?= $brd_id ?>">
+				<img class="hb-img" src="<?= ROOT_URL . '/images/' . $brd['icon'] ?>" alt="<?= $brd_id ?>">
 			</label>
 			<?php endif;?>
 		<?php endforeach; ?>
