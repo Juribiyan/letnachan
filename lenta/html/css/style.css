@@ -479,8 +479,9 @@ input[type="text"], .add-text {
     }
     .cont-colm {
         padding: 0!important;
-        transition: transform: .2s;
+        transition: transform .2s;
         will-change: transform;
+        transform-origin: bottom right;
     }
     body.menu-shown .cont-colm {
         transform: scale(.99);
