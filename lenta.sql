@@ -111,12 +111,6 @@ ALTER TABLE `online`
   ADD UNIQUE KEY `ip` (`ip`);
 
 --
--- Индексы таблицы `rate`
---
-ALTER TABLE `rate`
-  ADD UNIQUE KEY `thread` (`thread`);
-
---
 -- Индексы таблицы `users`
 --
 ALTER TABLE `users`
