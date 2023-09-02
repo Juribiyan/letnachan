@@ -12,8 +12,9 @@ function rape($id, $method)
     $get_numbers = $res['rating'];
     //----
     $sql_two     = "SELECT * FROM `rate` WHERE `ip`='" . $ip . "' AND `thread`='" . $id . "'";
-    $res2   = $db->query("SELECT * FROM `rate` WHERE `ip`='" . $ip . "' AND `thread`='" . $id . "'");
-    if ($res2->num_rows) {
+    $existing   = $db->query("SELECT COUNT(*) as cnt FROM `rate` WHERE `ip`='" . $ip . "' AND `thread`='" . $id . "'")
+    ->fetch_assoc()['cnt'];
+    if ($existing) {
         $rating        = $db->query("SELECT * FROM `blog` WHERE `id`='" . $id . "'")->fetch_assoc();
         $say['response'] = '100';
         $say['message']  = 'Вы уже голосовали за эту новость';

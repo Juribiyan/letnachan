@@ -8,13 +8,12 @@ if (!function_exists('clientBroadcast')) { // when pinged
     require_once '../engine.php';
 }
 
-if($db->query("SELECT * FROM was WHERE ip=".$intip)->num_rows == 0){
+if($db->query("SELECT COUNT(*) as cnt FROM was WHERE ip=".$intip)->fetch_assoc()['cnt'] == 0) {
     $db->query("INSERT INTO was (ip) VALUES(".$intip.")");
 }
 //Проверяем, онлайн ли юзер
-$isoline = $db->query("SELECT 1 FROM online WHERE ip=".$intip);
-if(!$isoline->num_rows)
-{
+$isoline = $db->query("SELECT COUNT(*) as cnt FROM online WHERE ip=".$intip)->fetch_assoc()['cnt'];
+if(!$isoline) {
     //Если нет, то заносим
     $db->query("INSERT INTO online (ip) VALUES(".$intip.")");
 }
@@ -28,13 +27,13 @@ else
 $db->query("DELETE FROM online WHERE dt<SUBTIME(NOW(),'0 0:1:0')");
 
 // Считаем всех гостей онлайн:
-$totalOnline = $db->query("SELECT * FROM online")->num_rows;
+$totalOnline = $db->query("SELECT COUNT(*) as cnt FROM online")->fetch_assoc()['cnt'];
 
 // Удаляем записи за прошлый день
 $db->query("DELETE FROM was WHERE dt<TIMESTAMP(CURDATE())");
 
 // Выводим:
-$wasonline = $db->query("SELECT * FROM was")->num_rows;
+$wasonline = $db->query("SELECT COUNT(*) as cnt FROM was")->fetch_assoc()['cnt'];
 echo $totalOnline;
 
 // Broadcast

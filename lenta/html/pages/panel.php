@@ -47,11 +47,10 @@ if (isset($_POST['login']) && isset($_POST['password'])){
     $login = $db->real_escape_string($_POST['login']);
     $password = my_crypt($_POST['password']);
     $query = "SELECT * FROM `users` WHERE `login`='{$login}' AND `password`='{$password}' LIMIT 1";
-    $sql = $db->query($query) or die($db->error);
-    if ($sql->num_rows == 1) {
-        $row = $sql->fetch_assoc();
-        $_SESSION['user_id'] = $row['id'];
-        $_SESSION['user_name'] = $row['name'];
+    $user = $db->query("SELECT * FROM `users` WHERE `login`='{$login}' AND `password`='{$password}' LIMIT 1")->fetch_assoc();
+    if ($user) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_name'] = $user['name'];
     }
     else {
         echo 'Такой логин с паролем не найдены в базе данных.';

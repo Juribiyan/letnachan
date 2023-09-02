@@ -43,32 +43,34 @@ if (isset($_GET['page']) and !$_GET['id']){
   }
 require_once 'custom/homeboards.php';
 $results = $db->query($sqlquery);
-if ($results->num_rows){
-    while ($row = $results->fetch_assoc()) {
-        $posid = $row['id'];
-        $rating = $row['rating'];
-        $homebrd = @$homeboards[$row['chan']];
-        $chan   = $homebrd ? $homebrd['icon'] : 'no.png';
-        $name   = stripslashes($row['subject']);
-        $text   = stripslashes($row['message']);
-        $text2  = stripslashes($row['fullmessage']);
-        $comnum = countcoms($row['id']);
-        $link   = $row['link'];
-        $category = whatcat($row['category']);
-        $cate = $row['category'];
-        $time   = formatDate($row['timestamp']);
-        if ($category) @$post_category = "<a href=\"$li_URL/news/$cate/\">$category</a> | "; else @$post_category = "";
-        if ($link){
-          @$post_name = "<a target=\"_blank\" href=\"$link\">$name</a>";
-        }else{
-          @$post_name = "$name";
-        }
-        if (isset($_GET['id']) and $text2) @$post_text2 = "<p>$text2</p>";
-        if ($text2 and !@$_GET['id']) @$post_text2_link =  "<a href=\"$li_URL/news?id=$posid\">Читать далее...</a>"; else @$post_text2_link =  "";
-        @$post_text2 = @$post_text2;
-        if(CheckLogin()) @$post_admin = "<br><a href=\"$li_URL/panel?del&id=$posid\" class=\"link\">Удалить</a> <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a> <a href=\"$li_URL/panel?unreal&id=$posid\" class=\"link\"><b>Я передумал</b></a>"; else @$post_admin = "";
-        $resonance = ($rating < 0 ? 'red' : 'green');
-        echo <<<EOT
+$cnt = 0;
+while ($row = $results->fetch_assoc()) {
+  $cnt++;
+  $posid = $row['id'];
+  $rating = $row['rating'];
+  $homebrd = @$homeboards[$row['chan']];
+  $chan   = $homebrd ? $homebrd['icon'] : 'no.png';
+  $name   = stripslashes($row['subject']);
+  $text   = stripslashes($row['message']);
+  $text2  = stripslashes($row['fullmessage']);
+  $comnum = countcoms($row['id']);
+  $link   = $row['link'];
+  $category = whatcat($row['category']);
+  $cate = $row['category'];
+  $time   = formatDate($row['timestamp']);
+  if ($category) @$post_category = "<a href=\"$li_URL/news/$cate/\">$category</a> | "; else @$post_category = "";
+  if ($link) {
+    @$post_name = "<a target=\"_blank\" href=\"$link\">$name</a>";
+  }
+  else {
+    @$post_name = "$name";
+  }
+  if (isset($_GET['id']) and $text2) @$post_text2 = "<p>$text2</p>";
+  if ($text2 and !@$_GET['id']) @$post_text2_link =  "<a href=\"$li_URL/news?id=$posid\">Читать далее...</a>"; else @$post_text2_link =  "";
+  @$post_text2 = @$post_text2;
+  if(CheckLogin()) @$post_admin = "<br><a href=\"$li_URL/panel?del&id=$posid\" class=\"link\">Удалить</a> <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a> <a href=\"$li_URL/panel?unreal&id=$posid\" class=\"link\"><b>Я передумал</b></a>"; else @$post_admin = "";
+  $resonance = ($rating < 0 ? 'red' : 'green');
+  echo <<<EOT
 <div class="entry">
   <div class="news-header">
     <span class="title"><img src="{$li_URL}/images/{$chan}" alt=""> {$post_name}</span>
@@ -79,47 +81,48 @@ if ($results->num_rows){
   </div>
 </div>
 EOT;
+}
+if ($cnt) {
+  if($post) { /*А так же комментарии, если есть потребность.*/
+    $comments = $db->query("SELECT * FROM `blog` WHERE `parrent` = $post AND `type`='post' ORDER BY `timestamp` ASC");
+    while ($row = $comments->fetch_assoc()) {
+      @$lastid = $row['id'];
+      $comid = $row['id'];
+      $comtext = stripslashes($row['message']);
+      $comtime = formatDate($row['timestamp']);          
+      echo <<<EOT
+      <a id="{$comid}"></a>
+      <div class="comment" id="comment{$comid}">
+        <div class="comment-info">{$comtime} <a id="href" onclick="javascript:insert('&gt;&gt;{$comid}');return false;">№{$comid}</a></div>
+        <div class="comment-text">
+          <p>{$comtext}</p>
+        </div>
+      </div>
+      EOT;
     }
-
-    if($post) { /*А так же комментарии, если есть потребность.*/
-      $comments = $db->query("SELECT * FROM `blog` WHERE `parrent` = $post AND `type`='post' ORDER BY `timestamp` ASC");
-        while ($row = $comments->fetch_assoc()) {
-          @$lastid = $row['id'];
-          $comid = $row['id'];
-          $comtext = stripslashes($row['message']);
-          $comtime = formatDate($row['timestamp']);          
-echo <<<EOT
-<a id="{$comid}"></a>
-<div class="comment" id="comment{$comid}">
-  <div class="comment-info">{$comtime} <a id="href" onclick="javascript:insert('&gt;&gt;{$comid}');return false;">№{$comid}</a></div>
-  <div class="comment-text">
-    <p>{$comtext}</p>
-  </div>
-</div>
-EOT;
-
-        }
-      echo '<id id="'.@$lastid.'"></id>';
-      echo '<form id="createcomm" method="post" action="api/ncomm.php">
-          <div class="olive"> 
-            <input type="hidden" name="entry" id="enty" value="'.$post.'">
-            <textarea name="message" id="commentText"></textarea>
-            <input type="submit" class="button" name="submitComment" value="Отправить" style="float:right;">
-            <captchazone>'.captcha($post).'</captchazone>
-          </div>
-        </form>'; 
-    }
-  }else{
-    echo errorMsg('nullnews');
+    echo '<id id="'.@$lastid.'"></id>';
+    echo '<form id="createcomm" method="post" action="api/ncomm.php">
+        <div class="olive"> 
+          <input type="hidden" name="entry" id="enty" value="'.$post.'">
+          <textarea name="message" id="commentText"></textarea>
+          <input type="submit" class="button" name="submitComment" value="Отправить" style="float:right;">
+          <captchazone>'.captcha($post).'</captchazone>
+        </div>
+      </form>'; 
   }
-if ((!@$_GET['id']) and ($page > 1 or $page < $pages)){
-    echo '<table class="cont-bottom"><tbody><tr>';
-    echo '<td class="left">';
-    if ($page > 1) echo '<a class="nav" href="?page=' . ($page - 1) . '">← новее</a>';
-    echo '</td>';
-    echo '<td class="right">';
-    if ($page!=$pages and $page < $pages) echo '<a class="nav" href="?page=' . ($page + 1) . '">старее →</a>';
-    echo '</td>';
-    echo '</tr></tbody></table>';
-  }
+}
+else {
+  echo errorMsg('nullnews');
+}
+
+if ((!@$_GET['id']) and ($page > 1 or $page < $pages)) {
+  echo '<table class="cont-bottom"><tbody><tr>';
+  echo '<td class="left">';
+  if ($page > 1) echo '<a class="nav" href="?page=' . ($page - 1) . '">← новее</a>';
+  echo '</td>';
+  echo '<td class="right">';
+  if ($page!=$pages and $page < $pages) echo '<a class="nav" href="?page=' . ($page + 1) . '">старее →</a>';
+  echo '</td>';
+  echo '</tr></tbody></table>';
+}
 ?>
