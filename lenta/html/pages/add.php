@@ -34,8 +34,10 @@
 	<?php require_once 'inc/embeds.php'; ?>
 	<script>const embeds = <?= json_encode($embeds) ?></script>
 	<div class="add-block">
-		<h2>Видео YouTube:</h2>
-		<input type="text" name="video" style="width:98%" placeholder="http://www.youtube.com/watch?v=b1WWpKEPdT4">
+		<h2>Вложение:</h2>
+		<div class="stretchy-input">
+			<input type="text" name="video" placeholder="Ссылка на <?= implode(', ', array_keys($embeds)) ?>">
+		</div>
 	</div>
 	<div class="add-block">
 		<h2>Принадлежность:</h2>

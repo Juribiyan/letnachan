@@ -52,19 +52,17 @@ if ($okay < WIPE_TIMEOUT_NEWS/* or $ip != "1307118148"*/) {
             $category = '';
         }
         $video    = $db->real_escape_string(strip_tags($_POST['video'])); # Видео
-        if (!empty($video))
-          {
-            parse_str(parse_url($video, PHP_URL_QUERY), $param);
-            $idvideo    = $param['v'];
-            $obj        = json_decode(file_get_contents("http://gdata.youtube.com/feeds/api/videos/$idvideo?v=2&alt=jsonc"));
-            $titlevideo = $obj->data->title;
-            $embedvideo = $obj->data->accessControl->embed;
-            if ($titlevideo and $embedvideo == "allowed")
-              {
-                $text2 .= '<p>Видео YouTube: <b>' . $titlevideo . '</b></p>';
-                $text2 .= '<span class="youtube"><a class="youtube-link" target="_blank" href="http://www.youtube.com/watch?v=' . $idvideo . '" title="Воспроизвести" style="background-image: url(http://i2.ytimg.com/vi/' . $idvideo . '/0.jpg);" id="' . $idvideo . '" onclick="youtube(this.id);return false;"><div class="youtube-link-div"></div></a></span>';
-              }
+        if (!empty($video)) {
+          require_once '../inc/embeds.php';
+          foreach($embeds as $site => $exp) {
+            if (preg_match($exp, $video, $matches)) {
+              $fn = "embed_".$site;
+              $fig_code = $fn($matches);
+              $text = $fig_code . $text;
+              break;
+            }
           }
+        }
         $db->query("INSERT INTO `blog` SET `subject`='$title', `message`='$text', `fullmessage`='$text2', `timestamp`='$time', `chan`='$chan', `link`='$link', `category`='$category',`type`='thread',`parrent`='0',`ip`='$ip'");
         $id = $db->insert_id;
 

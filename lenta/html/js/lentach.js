@@ -264,8 +264,41 @@ function init_updates() {
     entryStats.update()
 }
 
+function initEmbeds() {
+    if (typeof embeds != 'undefined') {
+        let siteList = []
+        for (let e in embeds) {
+            siteList.push(e)
+            embeds[e] = new RegExp(embeds[e].substr(1, embeds[e].length-2))
+        }
+        $('input[name=video]').on('input', function() {
+            $('.embed-indicator').remove()
+            for (let e in embeds) {
+                if (this.value.match(embeds[e])) {
+                    $(this).after(`<img class="embed-indicator" src="images/embeds/${e}.png" alt="${e}" title="${e}">`)
+                    break
+                }
+            }
+        })
+    }
+    $('.embed-youtube .et-collapsed').click(function() { // Expand YT video
+        $exp = $(this).parents('.expandable-thumb').find('.et-expanded')
+        if(!$exp.find('iframe').length) {
+            $exp.html(`<iframe src="https://www.youtube.com/embed/${$exp.data('code')}?enablejsapi=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`)
+        }
+    })
+    $('.embed-youtube .close-button').click(function() { // Pause the video on collapse
+        $frame = $(this).parents('.embed-youtube').find('iframe')
+        if ($frame.length) {
+            $frame[0].contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+        }
+    })
+}
+
 $(document).ready(function() {
     init_updates()
      // Simply fucking ping online updates
     setInterval(() => $.get('/api/online.php'), 1000 * 60)
+
+    initEmbeds()
 });
