@@ -96,12 +96,10 @@ if(CheckLoginS()){
 		}elseif(isset($_GET['del'])){
 			$id = $_GET['id'];
 			if(isset($_GET['com'])){
-				$results = $db->query("DELETE FROM `comments` WHERE `id` = $id");
 				header("location: panel?com");
 				exit;
 			}else{
 				$results = $db->query("DELETE FROM `blog` WHERE `id` = $id");
-				$results = $db->query("DELETE FROM `comments` WHERE `thread` = $id");
 				header("location: panel");
 				exit;
 			}
