@@ -107,14 +107,17 @@ require_once 'inc/func.php';
     <!--content-->
     <div class="content">
         <?php
-        $page = preg_replace("/[^\w\x7F-\xFF\s]/", "", $url['path']);
+        $path = preg_split("/\//", $url['path']);
+        $page = $path[1];
+        $post_cate = @$path[2];
         $page = $page . '.php';
-        if (is_file('pages/' . $page) == true) {
- //           echo $page; - для отладки, чтобы понять, на какой странице выведенная инфа
+        if (is_file("pages/$page")) {
             include("pages/$page");
-        }elseif (!@$_GET['pages']){
+        }
+        elseif (!@$_GET['pages']) {
             include("pages/news.php");
-        }else{
+        }
+        else {
             include('pages/404.php');
         }
         ?>

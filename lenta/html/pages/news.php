@@ -6,7 +6,6 @@
 $li_URL = ROOT_URL; // Слишком лень ковыряться в кавычках
 
 $post = (int) @$_GET['id'];
-$post_cate = preg_replace("/[^\w\x7F-\xFF\s]/", "", @$_GET['cate']);
 
  function captcha($id){
   if (@$_SESSION['post_captcha'] == true and @$_SESSION['post_captcha'] == $id){
