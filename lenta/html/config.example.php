@@ -20,4 +20,6 @@ define('SOCKETIO_PORT', '9393');
 define('SOCKETIO_SRV_TOKEN', '<any_random_shit>');
 define('DISABLE_SOCKETIO', false); // Disable client broadcasting for dev purposes
 
+define('CRYPT_SALT', '<any_other_random_shit>');
+
 mb_internal_encoding('UTF-8');

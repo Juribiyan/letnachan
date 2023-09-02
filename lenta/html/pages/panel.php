@@ -4,10 +4,9 @@ require 'inc/parse.php';
 require_once 'db.php';
 $db = connect_db();
 
-$secretWord = 'jdfskflsd6sd4f8sd5f46sd8s';
-function my_crypt($pass,$salt){
+function my_crypt($pass){
 	$spec=array('~','!','@','#','$','%','^','&','*','?');
-	$crypted=md5(md5($salt).md5($pass));
+	$crypted=md5(md5(CRYPT_SALT).md5($pass));
 	$c_text=md5($pass);
 	for ($i=0;$i<strlen($crypted);$i++){
 	if (ord($c_text[$i])>=48 and ord($c_text[$i])<=57){
@@ -22,7 +21,7 @@ function my_crypt($pass,$salt){
 }
 
 if (@$_GET['getpass']) {
-	echo my_crypt($_GET['getpass'], $secretWord);
+	echo my_crypt($_GET['getpass']);
 }
 
 # Идеальный код регистрации на ленте.
@@ -36,7 +35,7 @@ if (@$_GET['getpass']) {
     </form>"; 
 
 $reg_login = $_POST['reg_login'];
-$reg_password = my_crypt($_POST['reg_password'], $secretWord);
+$reg_password = my_crypt($_POST['reg_password']);
 $reg_name = $_POST['reg_name'];
 
 	if(isset($_POST['reg_login']) AND isset($_POST['reg_password']) AND isset($_POST['reg_name'])){	
@@ -46,7 +45,7 @@ $reg_name = $_POST['reg_name'];
 
 if (isset($_POST['login']) && isset($_POST['password'])){
     $login = $db->real_escape_string($_POST['login']);
-    $password = my_crypt($_POST['password'], $secretWord);
+    $password = my_crypt($_POST['password']);
     $query = "SELECT * FROM `users` WHERE `login`='{$login}' AND `password`='{$password}' LIMIT 1";
     $sql = $db->query($query) or die($db->error);
     if ($sql->num_rows == 1) {
