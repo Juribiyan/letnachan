@@ -113,11 +113,17 @@ EOT;
           'content' => preg_replace('~[\r\n]+~', '', $content)
         ]); // ------------ /Broadcast ------------
 
-        exit(json_encode(array(
+        if (@strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+          exit(json_encode(array(
             'code' => '200',
             'response' => 'Ваша новость успешно опубликована',
             'id' => $id
-        )));
+          )));
+        }
+        else {
+          header("Location: /news?id=$id");
+          die();
+        }
       }
     else
     //А если нет, то выводим всевозможные ошибки

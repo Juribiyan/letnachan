@@ -5,7 +5,8 @@ require_once '../inc/parse.php';
 require_once '../inc/validator.php';
 mb_internal_encoding("UTF-8");
 $request = parse_url($_SERVER['HTTP_REFERER']);
-if (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest' and $request['path'] !== 'news') {
+if ($request['path'] !== '/news') {
+    var_dump($request['path']);
     exit('Ты явно делаешь что-то не так');
 }
 $ip      = ip2long($_SERVER['REMOTE_ADDR']); # IP
@@ -90,10 +91,16 @@ EOT;
             )));
         }
     }
-    exit(json_encode(array(
-        'code' => '200',
-        'response' => 'Ваш комментарий добавлен'
-    )));
+    if (@strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        exit(json_encode(array(
+            'code' => '200',
+            'response' => 'Ваш комментарий добавлен'
+        )));
+    }
+    else {
+      header("Location: /news?id=$parrent");
+      die();
+    }
 } else
 //А если нет, то выводим ошибку
 {
