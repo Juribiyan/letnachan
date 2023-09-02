@@ -3,20 +3,6 @@
 // Страницы в pages
 // Пингвины в африке
 
-// Соединение с высшим
-/* error_reporting(E_ERROR | E_WARNING | E_PARSE);
-ob_start();
-echo "\n_POST:";
-var_dump($_POST);
-echo "_SESSION:";
-var_dump($_SESSION);
-echo "_COOKIE:";
-var_dump($_COOKIE);
-$contents = ob_get_contents();
-ob_end_clean();
-
-error_log($contents); */
-
 require_once 'db.php';
 $db = connect_db();
 

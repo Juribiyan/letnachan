@@ -15,14 +15,7 @@ $result=$db->query("SELECT * FROM `blog` WHERE `ip`='$ip' ORDER BY id DESC LIMIT
     $wipe=$row['timestamp'];
 }
 $okay = @$wipe ? ($time-$wipe) : WIPE_TIMEOUT_NEWS+1;
-ob_start();
-echo "sec code:" . $_SESSION['security_code'];
-var_dump($_POST['captcha']);
-echo "comparision:\n";
-var_dump((isset($_SESSION['security_code']) && isset($_SESSION['security_code']) && $_SESSION['security_code'] == $_POST['captcha']) == FALSE);
-$contents = ob_get_contents();
-ob_end_clean();
-error_log($contents);
+
 //Капчачек:
 if ((isset($_SESSION['security_code']) && isset($_SESSION['security_code'])  && $_SESSION['security_code'] == $_POST['captcha']) == FALSE)  {
   unset($_SESSION['security_code']);
