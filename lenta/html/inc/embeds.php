@@ -21,7 +21,7 @@ function embed_Youtube($matches) {
 			</div>
 		</div>
 		<div class="figure-controls">
-			<a href="https://www.youtube.com/watch?v={$code}" target="_blank" title="Открыть на Youtube"><img src="/images/embeds/youtube.png"></a>
+			<a href="https://www.youtube.com/watch?v={$code}" target="_blank" title="Открыть на Youtube"><img src="/images/embeds/Youtube.png"></a>
 			<div class="close-button" title="Свернуть"></div>
 		</div>
 	</label>
@@ -46,7 +46,7 @@ function embed_Catbox($matches) {
 		<input type="checkbox">
 		<{$media_tag} src="{$url}">{$closing_tag}
 		<div class="figure-controls">
-			<a href="{$url}" target="_blank" title="Открыть на Catbox"><img src="/images/embeds/catbox.png"></a>
+			<a href="{$url}" target="_blank" title="Открыть на Catbox"><img src="/images/embeds/Catbox.png"></a>
 			{$collapse}
 		</div>
 	</label>
