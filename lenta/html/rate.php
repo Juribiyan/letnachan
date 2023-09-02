@@ -1,11 +1,9 @@
 <?php
 include("engine.php");
-// require_once "Dklab/Realplexor.php";
 function rape($id, $method)
 {
     global $db; 
 
-    // $rpl = new Dklab_Realplexor("127.0.0.1", "10010", "main");
     $res = $db->query("SELECT * FROM `blog` WHERE `id`='" . $id . "' AND `type`='thread'")
     ->fetch_assoc();
     $ip          = ip2long($_SERVER['REMOTE_ADDR']);
@@ -30,9 +28,7 @@ function rape($id, $method)
     if ($get_numbers !== $new_numbers) {
         $db->query("UPDATE `blog` SET `rating`='" . $new_numbers . "'  WHERE `id`='" . $id . "'");
         $db->query("INSERT INTO `rate` SET `ip`='" . $ip . "',`thread`='" . $id . "'");
-        $rating = $db->query("SELECT * FROM `blog` WHERE `id`='" . $id . "'")->fetch_assoc();
         $say['response'] = '200';
-        $resonance = ($rating['rating'] < 0 ? 'red' : 'green');
         $say['message']  = 'Ваш голос засчитан';
         // -------------- Broadcast time! --------------
         clientBroadcast("stats:$id", 'rating-update', [
