@@ -58,7 +58,7 @@ AUTO_INCREMENT=2
 
 CREATE TABLE `online` (
   `id` int(11) NOT NULL,
-  `ip` int(11) NOT NULL,
+  `ip` bigint(20) NOT NULL,
   `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -69,7 +69,7 @@ CREATE TABLE `online` (
 --
 
 CREATE TABLE `rate` (
-  `ip` int(12) NOT NULL,
+  `ip` bigint(20) NOT NULL,
   `thread` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -94,7 +94,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `was` (
   `id` int(11) NOT NULL,
-  `ip` int(12) NOT NULL,
+  `ip` bigint(20) NOT NULL,
   `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
