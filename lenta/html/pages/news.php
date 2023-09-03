@@ -1,46 +1,71 @@
 <?php
 //ini_set('display_errors',1);
 //error_reporting(E_ALL);
- $_SESSION['bot'] = false;
+$_SESSION['bot'] = false;
+
+require_once 'custom/homeboards.php';
 
 $li_URL = ROOT_URL; // Слишком лень ковыряться в кавычках
 
-$post = (int) @$_GET['id'];
+function captcha($id) {
+  if (@$_SESSION['post_captcha'] == true and @$_SESSION['post_captcha'] == $id) {
+    $echo = "";
+  }
+  else  {
+    $echo = '<a id="cchange"><img src="captcha.php" id="captchaimage"></a><input type="text" name="captcha" autocomplete="off">';
+  }
+  return $echo;
+}
 
- function captcha($id){
-  if (@$_SESSION['post_captcha'] == true and @$_SESSION['post_captcha'] == $id){
-  $echo = "";
-  }else{
-  $echo = '<a id="cchange"><img src="captcha.php" id="captchaimage"></a><input type="text" name="captcha" autocomplete="off">';
-  }return $echo;
+$post = (int)@$_GET['id'];
+
+if ($post) {
+  $sqlquery = "SELECT * FROM `blog` WHERE `id` = $post AND `type`='thread'";
+  $page = 1;
 }
-if($post_cate){
-  $sql_cate = "(`real` = '1' or `real`='0') AND `category`='$post_cate'";
-}else{
-  $sql_cate = "`real` = '1'";
+else {
+  $filter = ['`type`="thread"'];
+  if ($page == 'news')
+    $filter []= "`real`='1'";
+/*  if ($page == 'random')
+    $filter []= "`real`='0'";*/
+  if ($post_cate)
+    $filter []= "`category`='$post_cate'";
+  $filter = implode(' AND ', $filter);
+
+  /*Кол-во страниц*/
+  $counter = $db->query('SELECT COUNT(`id`) as bc FROM `blog` WHERE '.$filter)
+  ->fetch_assoc()['bc'] - 1;
+  $pages = intval($counter / $papa) + 1;
+  $page = (int)(preg_replace("/[^\w\x7F-\xFF\s]/", "", @$_GET['page']));
+  $start = ($page > 0 && $page <= $pages) ? ($page * $papa - $papa) . "," : "";
+  $sqlquery = "SELECT * FROM `blog` WHERE $filter ORDER BY `timestamp` DESC LIMIT $start $papa";
+  if ($start == "")
+    $page = 1;
 }
-/*Кол-во страниц*/
-$counter = $db->query('SELECT COUNT(`id`) as bc FROM `blog` WHERE '.$sql_cate.'AND `type`="thread"')
-->fetch_assoc()['bc'] - 1;
-$pages   = intval($counter / $papa) + 1;
-if (isset($_GET['page']) and !$_GET['id']){
-    $page = preg_replace("/[^\w\x7F-\xFF\s]/", "", $_GET['page']);
-    $page = (int) $page;
-    if ($page > 0 && $page <= $pages){
-        $start = $page * $papa - $papa;
-        $sqlquery = ("SELECT * FROM `blog` WHERE $sql_cate AND `type`='thread' ORDER BY `timestamp` DESC LIMIT {$start}, {$papa}");
-      }else{
-        $sqlquery = ("SELECT * FROM `blog` WHERE $sql_cate AND `type`='thread' ORDER BY `timestamp` DESC LIMIT $papa");
-        $page = 1;
-      }
-  }elseif ($post){
-    $sqlquery = ("SELECT * FROM `blog` WHERE `id` = $post AND `type`='thread'");
-    $page  = 1;
-  }else{
+
+/*if (isset($_GET['page']) and !$_GET['id']) {
+  $page = preg_replace("/[^\w\x7F-\xFF\s]/", "", $_GET['page']);
+  $page = (int) $page;
+
+  if ($page > 0 && $page <= $pages) {
+    $start = $page * $papa - $papa;
+    $sqlquery = ("SELECT * FROM `blog` WHERE $sql_cate AND `type`='thread' ORDER BY `timestamp` DESC LIMIT {$start}, {$papa}");
+  }
+  else {
     $sqlquery = ("SELECT * FROM `blog` WHERE $sql_cate AND `type`='thread' ORDER BY `timestamp` DESC LIMIT $papa");
     $page = 1;
   }
-require_once 'custom/homeboards.php';
+}
+elseif ($post) {
+  $sqlquery = ("SELECT * FROM `blog` WHERE `id` = $post AND `type`='thread'");
+  $page  = 1;
+}
+else {
+  $sqlquery = ("SELECT * FROM `blog` WHERE $sql_cate AND `type`='thread' ORDER BY `timestamp` DESC LIMIT $papa");
+  $page = 1;
+}*/
+
 $results = $db->query($sqlquery);
 $cnt = 0;
 while ($row = $results->fetch_assoc()) {
@@ -67,7 +92,15 @@ while ($row = $results->fetch_assoc()) {
   if (isset($_GET['id']) and $text2) @$post_text2 = "<p>$text2</p>";
   if ($text2 and !@$_GET['id']) @$post_text2_link =  "<a href=\"$li_URL/news?id=$posid\">Читать далее...</a>"; else @$post_text2_link =  "";
   @$post_text2 = @$post_text2;
-  if(CheckLogin()) @$post_admin = "<br><a href=\"$li_URL/panel?del&id=$posid\" class=\"link\">Удалить</a> <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a> <a href=\"$li_URL/panel?unreal&id=$posid\" class=\"link\"><b>Я передумал</b></a>"; else @$post_admin = "";
+  $post_admin = CheckLogin()
+    ? "<br>
+      <a href=\"$li_URL/panel?del&id=$posid\" class=\"link\">Удалить</a>
+      <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a>"
+      . ($row['real']==1
+        ? "<a href=\"$li_URL/panel?unreal&id=$posid\" class=\"link\"><b>Я передумал</b></a>"
+        : "<a href=\"$li_URL/panel?real&id=$posid\" class=\"link\"><b>Одобряе!</b></a>"
+      )
+    : "";
   $resonance = ($rating < 0 ? 'red' : 'green');
   echo <<<EOT
 <div class="entry">

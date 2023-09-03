@@ -16,14 +16,19 @@ require_once 'inc/func.php';
         $url = parse_url($url);
         $path_map = [
             '/random' => 'Все новости',
+            '/news' => 'Все новости (одобренные)',
             '/add' => 'Добавление новости',
             '/help' => 'Помощь',
             '/rules' => 'Правила',
             '/contact' => 'Контакты',
-            '/news/aib/' => 'Новости АИБ',
-            '/news/irl/' => 'Новости ИРЛ',
-            '/news/int/' => 'Новости Интернета',
-            '/news/all/' => 'Обсуждение'
+            '/news/aib/' => 'Новости АИБ (одобренные)',
+            '/news/irl/' => 'Новости ИРЛ (одобренные)',
+            '/news/int/' => 'Новости Интернета (одобренные)',
+            '/news/all/' => 'Обсуждения (одобренные)',
+            '/category/aib/' => 'Новости АИБ',
+            '/category/irl/' => 'Новости ИРЛ',
+            '/category/int/' => 'Новости Интернета',
+            '/category/all/' => 'Обсуждения'
         ];
         if (@$path_map[$url['path']]) {
             $title = $path_map[$url['path']];
@@ -64,10 +69,11 @@ require_once 'inc/func.php';
         <hr>
         <menu>
             <li><a href="/random" class="menu-a">Все новости</a></li>
-            <li><a href="/news/aib/" class="menu-a">Новости АИБ</a></li>
-            <li><a href="/news/irl/" class="menu-a">Новости ИРЛ</a></li>
-            <li><a href="/news/int/" class="menu-a">Новости Интернета</a></li>
-            <li><a href="/news/all/" class="menu-a">Обсуждение</a></li>
+            <li><a href="/news" class="menu-a">Одобрeнные</a></li>
+            <li><a href="/category/aib/" class="menu-a">Новости АИБ</a></li>
+            <li><a href="/category/irl/" class="menu-a">Новости ИРЛ</a></li>
+            <li><a href="/category/int/" class="menu-a">Новости Интернета</a></li>
+            <li><a href="/category/all/" class="menu-a">Обсуждение</a></li>
         </menu>
         <hr>
         <div class="left-links">
@@ -110,15 +116,17 @@ require_once 'inc/func.php';
         $path = preg_split("/\//", $url['path']);
         $page = $path[1];
         $post_cate = @$path[2];
-        $page = $page . '.php';
-        if (is_file("pages/$page")) {
-            include("pages/$page");
-        }
-        elseif (!@$_GET['pages']) {
+        if (!$page || $page == 'random' || $page == 'category') {
             include("pages/news.php");
         }
         else {
-            include('pages/404.php');
+            $page_file = "pages/$page.php";
+            if (is_file($page_file)) {
+                include($page_file);
+            }
+            else {
+                include('pages/404.php');
+            }
         }
         ?>
     </div>
