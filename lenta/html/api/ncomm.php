@@ -33,6 +33,16 @@ if (USE_HCAPTCHA
 } 
 unset($_SESSION['security_code']);
 
+if(trim($_POST['message']) == $_SESSION['last_comment']) {
+    exit(json_encode(array(
+    'code' => '403',
+    'response' => 'Упырьте мел.'
+  )));
+}
+else {
+    $_SESSION['last_comment'] = trim($_POST['message']);
+}
+
 //Настраиваем параметры валидации комментария
 $validator = new FormValidator();
 $validator->addValidation("message", "req", "И где комментарий?");
