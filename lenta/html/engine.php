@@ -98,7 +98,7 @@ function clientBroadcast($channel, $event, $data=null) {
 }
 
 function CheckHcaptcha() {
-	if ($_POST['h-captcha-response']) {
+	if (@$_POST['h-captcha-response']) {
 		$data = array(
 		  'secret' => HCAPTCHA_SECRET,
 		  'response' => $_POST['h-captcha-response']
