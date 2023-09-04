@@ -7,14 +7,11 @@ require_once 'custom/homeboards.php';
 
 $li_URL = ROOT_URL; // Слишком лень ковыряться в кавычках
 
-function captcha($id) {
-  if (@$_SESSION['post_captcha'] == true and @$_SESSION['post_captcha'] == $id) {
-    $echo = "";
-  }
-  else  {
-    $echo = '<a id="cchange"><img src="captcha.php" id="captchaimage"></a><input type="text" name="captcha" autocomplete="off">';
-  }
-  return $echo;
+function captcha() {
+  return USE_HCAPTCHA
+    ? '<script src="https://js.hcaptcha.com/1/api.js" async defer></script>'.
+      '<div class="h-captcha" data-sitekey="'.HCAPTCHA_SITEKEY.'" data-callback="enable_submit"></div>'
+    : '<a id="cchange"><img src="captcha.php" id="captchaimage"></a><input type="text" name="captcha" autocomplete="off">';
 }
 
 $post = (int)@$_GET['id'];
@@ -27,8 +24,6 @@ else {
   $filter = ['`type`="thread"'];
   if ($page == 'news')
     $filter []= "`real`='1'";
-/*  if ($page == 'random')
-    $filter []= "`real`='0'";*/
   if ($post_cate)
     $filter []= "`category`='$post_cate'";
   $filter = implode(' AND ', $filter);
@@ -43,28 +38,6 @@ else {
   if ($start == "")
     $page = 1;
 }
-
-/*if (isset($_GET['page']) and !$_GET['id']) {
-  $page = preg_replace("/[^\w\x7F-\xFF\s]/", "", $_GET['page']);
-  $page = (int) $page;
-
-  if ($page > 0 && $page <= $pages) {
-    $start = $page * $papa - $papa;
-    $sqlquery = ("SELECT * FROM `blog` WHERE $sql_cate AND `type`='thread' ORDER BY `timestamp` DESC LIMIT {$start}, {$papa}");
-  }
-  else {
-    $sqlquery = ("SELECT * FROM `blog` WHERE $sql_cate AND `type`='thread' ORDER BY `timestamp` DESC LIMIT $papa");
-    $page = 1;
-  }
-}
-elseif ($post) {
-  $sqlquery = ("SELECT * FROM `blog` WHERE `id` = $post AND `type`='thread'");
-  $page  = 1;
-}
-else {
-  $sqlquery = ("SELECT * FROM `blog` WHERE $sql_cate AND `type`='thread' ORDER BY `timestamp` DESC LIMIT $papa");
-  $page = 1;
-}*/
 
 $results = $db->query($sqlquery);
 $cnt = 0;
@@ -137,8 +110,9 @@ if ($cnt) {
         <div class="olive"> 
           <input type="hidden" name="entry" id="enty" value="'.$post.'">
           <textarea name="message" id="commentText"></textarea>
-          <input type="submit" class="button" name="submitComment" value="Отправить" style="float:right;">
-          <captchazone>'.captcha($post).'</captchazone>
+          <captchazone>'.captcha().'</captchazone>
+          <input type="submit" class="button" name="submitComment" value="Отправить" style="float:right;"'.
+            (USE_HCAPTCHA ? ' disabled' : '').'>
         </div>
       </form>'; 
   }

@@ -22,4 +22,8 @@ define('DISABLE_SOCKETIO', false); // Disable client broadcasting for dev purpos
 
 define('CRYPT_SALT', '<any_other_random_shit>');
 
+define('USE_HCAPTCHA', true);
+define('HCAPTCHA_SITEKEY', '<your_sitekey>'); // get yours @ https://dashboard.hcaptcha.com/
+define('HCAPTCHA_SECRET', '<your_secret_key>');
+
 mb_internal_encoding('UTF-8');

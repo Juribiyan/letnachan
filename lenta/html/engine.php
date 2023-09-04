@@ -96,3 +96,21 @@ function clientBroadcast($channel, $event, $data=null) {
 		die('cURL error: ' . curl_error($curl_session));
 	}*/
 }
+
+function CheckHcaptcha() {
+	if ($_POST['h-captcha-response']) {
+		$data = array(
+		  'secret' => HCAPTCHA_SECRET,
+		  'response' => $_POST['h-captcha-response']
+		);
+		$verify = curl_init();
+		curl_setopt($verify, CURLOPT_URL, "https://hcaptcha.com/siteverify");
+		curl_setopt($verify, CURLOPT_POST, true);
+		curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($data));
+		curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($verify);
+		$responseData = json_decode($response);
+		return ($responseData->success == true) ? 'ok' : 'incorrect';
+	}
+	return 'incorrect';
+}

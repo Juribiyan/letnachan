@@ -18,12 +18,21 @@ while ($row = $result->fetch_array()) {
 }
 
 $okay = @$wipe ? ($time-$wipe) : WIPE_TIMEOUT_COMM+1;
+
 //Капчачек:
-if ((isset($_SESSION['security_code']) && isset($_SESSION['security_code']) && $_SESSION['security_code'] == $_POST['captcha']) == FALSE) {
-    unset($_SESSION['security_code']);
-    postError('Неверная капча!');
-}
+if (USE_HCAPTCHA
+  ? CheckHcaptcha() !== 'ok'
+  : (
+    !isset($_SESSION['security_code']) 
+    ||
+    $_SESSION['security_code'] != $_POST['captcha']
+  )
+) {
+  unset($_SESSION['security_code']);
+  postError('Неверная капча!');
+} 
 unset($_SESSION['security_code']);
+
 //Настраиваем параметры валидации комментария
 $validator = new FormValidator();
 $validator->addValidation("message", "req", "И где комментарий?");

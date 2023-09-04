@@ -17,11 +17,19 @@ $result=$db->query("SELECT * FROM `blog` WHERE `ip`='$ip' ORDER BY id DESC LIMIT
 $okay = @$wipe ? ($time-$wipe) : WIPE_TIMEOUT_NEWS+1;
 
 //Капчачек:
-if ((isset($_SESSION['security_code']) && isset($_SESSION['security_code'])  && $_SESSION['security_code'] == $_POST['captcha']) == FALSE)  {
+if (USE_HCAPTCHA
+  ? CheckHcaptcha() !== 'ok'
+  : (
+    !isset($_SESSION['security_code']) 
+    ||
+    $_SESSION['security_code'] != $_POST['captcha']
+  )
+) {
   unset($_SESSION['security_code']);
   postError('Неверная капча!');
 } 
 unset($_SESSION['security_code']);
+
 if ($okay < WIPE_TIMEOUT_NEWS/* or $ip != "1307118148"*/) {
   exit(json_encode(array(
     'code' => '403',

@@ -55,13 +55,18 @@
 			<?php endif;?>
 		<?php endforeach; ?>
 	</div>
+	<?php if (USE_HCAPTCHA): ?>
+		<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+		<div class="h-captcha" data-sitekey="<?= HCAPTCHA_SITEKEY ?>" data-callback="enable_submit"></div>
+	<?php else: ?>
+		<div class="add-block">
+			<h2>Капча:</h2>
+			<a id="cchange"><img src="captcha.php" id="captchaimage"></a>
+			<input type="text" name="captcha" id="captcha" autocomplete="off">
+		</div>
+	<?php endif; ?>
 	<div class="add-block">
-		<h2>Капча:</h2>
-		<a id="cchange"><img src="captcha.php" id="captchaimage"></a>
-		<input type="text" name="captcha" id="captcha" autocomplete="off">
-	</div>
-	<div class="add-block">
-		<input type="submit" class="button" value="Отправить">
+		<input type="submit" class="button" value="Отправить"<?= USE_HCAPTCHA ? ' disabled' : '' ?>>
 	</div>
 	<br>
 </form>

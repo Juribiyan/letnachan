@@ -89,7 +89,7 @@ function vote(method, id) {
 
 $(function(){$('#reload').on('click',function(){location.reload()})});//Обновление страницы по кнопочке, той, что рядом с часами
 
-$(function(){$('#cchange').on('click',function(){$("#captchaimage").attr("src","captcha.php?" + new Date().getTime());return false})});//Смена каптчи по клику
+$(function(){$('#cchange').on('click', updateCaptcha)});//Смена каптчи по клику
 
 $(function () {/*AJAX-постинг новости*/
     $("form#createnews").submit(function (event) {
@@ -123,7 +123,7 @@ function createcomm() {/*AJAX-добавление комментариев */
         var obj = jQuery.parseJSON(data);
         if (obj.code == '200') {
             $("#commentText").val('');
-            $('captchazone').html('<a id="cchange"><img src="captcha.php?' + new Date().getTime() + '" id="captchaimage"></a><input type="text" name="captcha" autocomplete="off">');
+            updateCaptcha()
             $('input[name=captcha]').val('');
             $('html, body').animate({ scrollTop: $('form').offset().top }, 'slow');
             $('#loadbar').addClass('success').html(obj.response);
@@ -132,7 +132,7 @@ function createcomm() {/*AJAX-добавление комментариев */
             });
         }
         if (obj.code == '403'|| obj.code == '400'){
-            $('captchazone').html('<a id="cchange"><img src="captcha.php?' + new Date().getTime() + '" id="captchaimage"></a><input type="text" name="captcha" autocomplete="off">');
+            updateCaptcha()
             $("#loadbar").addClass("error").html(obj.response);
             $("#loadbar").delay(2000).fadeOut('slow', function () {
                 $(this).remove();
@@ -145,6 +145,17 @@ function createcomm() {/*AJAX-добавление комментариев */
             });
         }
     });
+}
+
+function updateCaptcha() {
+    $c = $('#captchaimage')
+    if ($c.length) {
+        $c.attr('src', `captcha.php?${new Date().getTime()}`)
+    }
+    else if (typeof hcaptcha != 'undefined') {
+        hcaptcha.reset()
+        $('input[type="submit"]').attr('disabled', true)
+    }
 }
 
 $(function () { /*AJAX-постинг комментариев*/
@@ -293,6 +304,11 @@ function initEmbeds() {
             $frame[0].contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
         }
     })
+}
+
+// Used with hcaptcha
+function enable_submit() {
+    $('input[type="submit"]').attr('disabled', false)
 }
 
 $(document).ready(function() {

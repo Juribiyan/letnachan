@@ -354,6 +354,9 @@ input[type="text"], .add-text {
     width: 90px;
     vertical-align: top;
 }
+captchazone {
+    display: inline-block;
+}
 .spoiler {
     background: #ededed;
     color: #ededed;
