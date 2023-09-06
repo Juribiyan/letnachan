@@ -67,11 +67,11 @@ while ($row = $results->fetch_assoc()) {
   @$post_text2 = @$post_text2;
   $post_admin = CheckLogin()
     ? "<br>
-      <a href=\"$li_URL/panel?del&id=$posid\" class=\"link\">Удалить</a>
+      <a href=\"$li_URL/api/admin.php?del&id=$posid\" data-action=\"del\" class=\"link admin-ajax-link\">Удалить</a>
       <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a> "
       . ($row['real']==1
-        ? "<a href=\"$li_URL/panel?unreal&id=$posid\" class=\"link\"><b>Я передумал</b></a>"
-        : "<a href=\"$li_URL/panel?real&id=$posid\" class=\"link\"><b>Одобряе!</b></a>"
+        ? "<a href=\"$li_URL/api/admin.php?unreal&id=$posid\" data-action=\"unreal\" class=\"link admin-ajax-link\"><b>Я передумал</b></a>"
+        : "<a href=\"$li_URL/api/admin.php?real&id=$posid\" data-action=\"real\" class=\"link admin-ajax-link\"><b>Одобряе!</b></a>"
       )
     : "";
   $resonance = ($rating < 0 ? 'red' : 'green');

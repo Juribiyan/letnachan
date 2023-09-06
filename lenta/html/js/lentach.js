@@ -290,6 +290,33 @@ const popup = {
     }
 }
 
+$(function() {
+    $('.admin-ajax-link').on('click', function(ev) {
+        popup.load()
+        ev.preventDefault()
+        let action = this.dataset.action
+        $.getJSON(this.href, data => {
+            if (data.error) {
+                popup.message('error', data.msg)
+            }
+            else {
+                popup.message('success', data.msg)
+                if (action == 'del') {
+                    $(this).parents('.entry').remove()
+                }
+                if (action == 'real') {
+                    this.href = this.href.replace('?real', '?unreal')
+                    $(this).text('Я передумал').attr('data-action', 'unreal')
+                }
+                if (action == 'unreal') {
+                    this.href = this.href.replace('?unreal', '?real')
+                    $(this).text('Одобряе!').attr('data-action', 'real')
+                }
+            }
+        })
+    })
+})
+
 // Used with hcaptcha
 function enable_submit() {
     $('input[type="submit"]').attr('disabled', false)
