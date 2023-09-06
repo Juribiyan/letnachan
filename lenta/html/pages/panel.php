@@ -58,7 +58,7 @@ if(CheckLoginS()) {
 			echo "<p>Поста с указанным ID не существует.</p>";
 			exit();
 		}
-		echo "<br><form action='/api/panel.php?edit&id=".$row['id']."' method='post' name='form_add'>
+		echo "<br><form action='/api/admin.php?edit&id=".$row['id']."' method='post' name='form_add'>
 		<input type='text' name='subject' value=\"".$row['subject']."\"><br>
 		<textarea name='message' cols=\"40\" rows=\"10\">".$row['message']."</textarea><br>";
 		if($row['fullmessage']){
