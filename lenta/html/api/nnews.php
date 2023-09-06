@@ -98,9 +98,9 @@ if ($okay < WIPE_TIMEOUT_NEWS/* or $ip != "1307118148"*/) {
       {$post_category}
       <a class="link" href="{$li_URL}/news?id={$id}">Дискач: <num>0</num></a>
       <span class="foradmin"><br>
-        <a href="{$li_URL}/panel?del&id={$id}" class="link">Удалить</a>
+        <a href="{$li_URL}/api/admin.php?del&id={$id}" data-action="del" class="link admin-ajax-link">Удалить</a>
         <a href="{$li_URL}/panel?edit&id={$id}" class="link">Редактировать</a>
-        <a href="{$li_URL}/panel?real&id={$id}" class="link"><b>Одобряе!</b></a>
+        <a href="{$li_URL}/api/admin.php?real&id={$id}" data-action="real" class="link admin-ajax-link"><b>Одобряе!</b></a>
       </span>
     </span>
   </div>

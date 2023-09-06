@@ -291,9 +291,9 @@ const popup = {
 }
 
 $(function() {
-    $('.admin-ajax-link').on('click', function(ev) {
-        popup.load()
+    $('.content').on('click', '.admin-ajax-link', function(ev) {
         ev.preventDefault()
+        popup.load()
         let action = this.dataset.action
         $.getJSON(this.href, data => {
             if (data.error) {
