@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-require_once '../db.php';
-$db = connect_db();
+require_once '../engine.php';
 require_once '../inc/admin.php';
 
 $li_URL = ROOT_URL;
@@ -24,8 +23,14 @@ if(CheckLoginS()) {
 			"Пост отредактирован.", "Нечего редактировать");
 	}
 	if (isset($_GET['del'])) {
-		query_and_check("DELETE FROM `blog` WHERE `id` = $id",
-			"Пост удален.", "Нечего удалять.");
+		$db->query("DELETE FROM `blog` WHERE `id` = $id");
+		if ($db->affected_rows) {
+			clientBroadcast('global', 'del-entry', $id);
+			exit_ok("Пост удален.");
+		}
+		else {
+			exit_err("Нечего удобрять.");
+		}
 	}
 	elseif (isset($_GET['real'])) {
 		query_and_check("UPDATE `blog` SET `real`='1' WHERE `id` = $id", 

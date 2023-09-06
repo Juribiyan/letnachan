@@ -229,6 +229,11 @@ function init_updates() {
     if (!socketOK) return;
     // Subscribe to updates of the online counter
     socket.subscribe('global', 'online-update', onlineUpdate)
+    socket.subscribe('global', 'del-entry', id => {
+        $(`#${id}`).parents('.entry').remove()
+        popup.load()
+        popup.message('error', `Пост #${id} удалён.`)
+    })
     // Subscribe to new news entries
     if (location.pathname === '/random' && location.search === "") {
         socket.subscribe('global', 'new-entry', pushNewsEntry)
