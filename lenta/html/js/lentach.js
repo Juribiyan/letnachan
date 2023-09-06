@@ -57,8 +57,7 @@ function timenow() {
 setInterval(timenow, 100);
 
 function vote(method, id) {
-    $('#loadbar').remove();
-    $("body").append('<div id="loadbar" class="pr pr-text">Загрузка...</div>');
+    popup.load()
     $.ajax({
         type: "GET",
         url: '/rate.php?id=' + id + '&method=' + method + '&lastthread=' + $('span[class="info"] span').eq(1).attr('id') + '&posts=' + $('.info').length,
@@ -66,21 +65,10 @@ function vote(method, id) {
             var obj = jQuery.parseJSON(data);
             $('#' + id).fadeIn(500).html(obj.num);
             if (obj.response == '200') {
-                $('#loadbar').addClass('success').html(obj.message);
-                $("#loadbar").delay(2000).fadeOut('slow', function () {
-                    $(this).remove();
-                });
-
-            } else if (obj.response == '100') {
-                $("#loadbar").addClass("error").html(obj.message);
-                $("#loadbar").delay(2000).fadeOut('slow', function () {
-                    $(this).remove();
-                });
-            } else {
-                $("#loadbar").addClass("error").html(obj.message);
-                $("#loadbar").delay(2000).fadeOut('slow', function () {
-                    $(this).remove();
-                });
+                popup.message('success', obj.message)
+            }
+            else {
+                popup.message('error', obj.message)
             }
         }
     });
@@ -94,22 +82,16 @@ $(function(){$('#cchange').on('click', updateCaptcha)});//Смена каптч�
 $(function () {/*AJAX-постинг новости*/
     $("form#createnews").submit(function (event) {
         event.preventDefault();
-        $('#loadbar').remove();
-        $("body").append('<div id="loadbar" class="pr pr-text">Загрузка...</div>');
+        popup.load()
         $.post('api/nnews.php', $('#createnews').serialize(), function (data) {
             var obj = jQuery.parseJSON(data);
             if (obj.code == '200') {
-                $('#loadbar').addClass('success').html(obj.response);
-                $("#loadbar").delay(1000).fadeOut('slow', function () {
-                    $(this).remove();
-                    window.location = "/news?id=" + obj.id;
-                });
-            } else {
-                //noinspection JSJQueryEfficiency
-                $("#loadbar").addClass("error").html(obj.response);
-                $("#loadbar").delay(2000).fadeOut('slow', function () {
-                    $(this).remove();
-                });
+                popup.message('success', obj.response, () => {
+                    window.location = "/news?id=" + obj.id
+                })
+            } 
+            else {
+                popup.message('error', obj.response)
             }
         });
         return false;
@@ -117,8 +99,7 @@ $(function () {/*AJAX-постинг новости*/
 });
 
 function createcomm() {/*AJAX-добавление комментариев */
-    $('#loadbar').remove();
-    $("body").append('<div id="loadbar" class="pr pr-text">Загрузка...</div>');
+    popup.load()
     $.post('api/ncomm.php', $('#createcomm').serialize(), function (data) {
         var obj = jQuery.parseJSON(data);
         if (obj.code == '200') {
@@ -126,24 +107,12 @@ function createcomm() {/*AJAX-добавление комментариев */
             updateCaptcha()
             $('input[name=captcha]').val('');
             $('html, body').animate({ scrollTop: $('form').offset().top }, 'slow');
-            $('#loadbar').addClass('success').html(obj.response);
-            $("#loadbar").delay(1000).fadeOut('slow', function () {
-                $(this).remove();
-            });
+            popup.message('success', obj.response)
         }
-        if (obj.code == '403'|| obj.code == '400'){
+        if (obj.code == '403'|| obj.code == '400') {
             updateCaptcha()
-            $("#loadbar").addClass("error").html(obj.response);
-            $("#loadbar").delay(2000).fadeOut('slow', function () {
-                $(this).remove();
-            });
-
-        }    else {
-            $("#loadbar").addClass("error").html(obj.response);
-            $("#loadbar").delay(2000).fadeOut('slow', function () {
-                $(this).remove();
-            });
         }
+        popup.message('error', obj.response)
     });
 }
 
@@ -242,7 +211,6 @@ function pushNewsEntry({id, content} = {}) {
     $('.content').prepend(content)
     entryStats.update()
     setTimeout(() => $(`.entry .rat-com#${id}`).parents('.entry').removeClass('new'), 3000)
-    
 }
 
 function pushNewComment({id, content} = {}) {
@@ -304,6 +272,22 @@ function initEmbeds() {
             $frame[0].contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
         }
     })
+}
+
+const popup = {
+    load: function(msg = "Загрузка...") {
+        $('#loadbar').remove();
+        $("body").append('<div id="loadbar" class="pr pr-text">Загрузка...</div>');
+    },
+    message: function(_class="success", msg="", callback) {
+        $('#loadbar').addClass(_class).html(msg);
+        $("#loadbar").delay(1000).fadeOut('slow', function () {
+            $(this).remove();
+            if (callback) {
+                callback()
+            }
+        });
+    }
 }
 
 // Used with hcaptcha
