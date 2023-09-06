@@ -68,7 +68,7 @@ while ($row = $results->fetch_assoc()) {
   $post_admin = CheckLogin()
     ? "<br>
       <a href=\"$li_URL/panel?del&id=$posid\" class=\"link\">Удалить</a>
-      <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a>"
+      <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a> "
       . ($row['real']==1
         ? "<a href=\"$li_URL/panel?unreal&id=$posid\" class=\"link\"><b>Я передумал</b></a>"
         : "<a href=\"$li_URL/panel?real&id=$posid\" class=\"link\"><b>Одобряе!</b></a>"
