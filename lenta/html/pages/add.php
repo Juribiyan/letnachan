@@ -1,7 +1,17 @@
+<?php 
+if (USE_TELEGRAM) {
+  require_once 'api/boolk_api.php';
+  list($telegram_logon, $may_post) = telegramLogon();
+}
+else {
+  list($telegram_logon, $may_post) = ['', true];
+}
+?>
 <div class="cont-header">
 	Добавить новость
 </div>
-<form id="createnews" method="post" action="api/nnews.php">
+<?= $telegram_logon ?>
+<form id="createnews" method="post" class="onlogin-reveal" action="api/nnews.php" <?= (!$may_post) ? 'style="display:none"' : '' ?>>
 	<div class="add-block">
 		<h2>Заголовок:</h2>
 		<input type="text" name="title" placeholder="Не более <?=$title_lim;?> символов">

@@ -33,7 +33,24 @@ if (USE_HCAPTCHA
 } 
 unset($_SESSION['security_code']);
 
-if(trim($_POST['message']) == $_SESSION['last_comment']) {
+$tg_user='';
+if (USE_TELEGRAM) {
+  require_once 'boolk_api.php';
+  $user = userByCookie();
+  if (!$user || $user['banned_by']) {
+    postError('Неверный логин!');
+  }
+  $tg_user = $user['id'];
+}
+
+if (avg_strlen($_POST['message']) > MAX_AVG_STRLEN) {
+  exit(json_encode(array(
+    'code' => '403',
+    'response' => 'ПОШЕЛ НАХУЙ'
+  )));
+}
+
+if(trim($_POST['message']) == @$_SESSION['last_comment']) {
     exit(json_encode(array(
     'code' => '403',
     'response' => 'Упырьте мел.'
@@ -49,7 +66,6 @@ $validator->addValidation("message", "req", "И где комментарий?")
 if ($validator->ValidateForm())
 //Если входные данные нас удовлетворяют, то создаем комментарий
 {
-    // $rpl = new Dklab_Realplexor("127.0.0.1", "10010", "main");
     $messcheck = preg_replace('/\n(\s*\n)+/', "\n\n", $_POST['message']); #Выпиливаем пустые строки из комментария
     $message   = $db->real_escape_string(MarkPost(mb_substr(limitlines($messcheck, 7), 0, 1024))); # Текст комментария
     $isitcomment = $db->query("SELECT  `type` FROM  `blog` WHERE  `id` = '$parrent'")->fetch_array();
@@ -60,11 +76,12 @@ if ($validator->ValidateForm())
         )));
     } else {
         if ($isitcomment['type'] == 'thread') {
+            // No FUCKING clue what "ch" means and why is this branching needed!
             if (isset($_POST['captcha']) and !empty($_POST['captcha'])) {
-                $db->query("INSERT INTO `blog` SET `message`='$message', `timestamp`='$time', `type`='post',`parrent`='$parrent',`ip`='$ip',`ch`='1'");
+                $db->query("INSERT INTO `blog` SET `message`='$message', `timestamp`='$time', `type`='post',`parrent`='$parrent',`ip`='$ip',`ch`='1', `tg_user`='$tg_user'");
                 @$id = $db->insert_id;
             } else {
-                $db->query("INSERT INTO `blog` SET `message`='$message', `timestamp`='$time', `type`='post',`parrent`='$parrent',`ip`='$ip'");
+                $db->query("INSERT INTO `blog` SET `message`='$message', `timestamp`='$time', `type`='post',`parrent`='$parrent',`ip`='$ip', `tg_user`='$tg_user'");
                 @$id = $db->insert_id;
             }
             // -------------- Broadcast time! --------------

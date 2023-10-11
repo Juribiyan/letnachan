@@ -30,6 +30,16 @@ if (USE_HCAPTCHA
 } 
 unset($_SESSION['security_code']);
 
+$tg_user='';
+if (USE_TELEGRAM) {
+  require_once 'boolk_api.php';
+  $user = userByCookie();
+  if (!$user || $user['banned_by']) {
+    postError('Неверный логин!');
+  }
+  $tg_user = $user['id'];
+}
+
 if ($okay < WIPE_TIMEOUT_NEWS/* or $ip != "1307118148"*/) {
   exit(json_encode(array(
     'code' => '403',
@@ -64,7 +74,7 @@ if ($okay < WIPE_TIMEOUT_NEWS/* or $ip != "1307118148"*/) {
             }
           }
         }
-        $db->query("INSERT INTO `blog` SET `subject`='$title', `message`='$text', `fullmessage`='$text2', `timestamp`='$time', `chan`='$chan', `link`='$link', `category`='$category',`type`='thread',`parrent`='0',`ip`='$ip'");
+        $db->query("INSERT INTO `blog` SET `subject`='$title', `message`='$text', `fullmessage`='$text2', `timestamp`='$time', `chan`='$chan', `link`='$link', `category`='$category', `type`='thread', `parrent`='0', `ip`='$ip', `tg_user`='$tg_user'");
         $id = $db->insert_id;
 
         // -------------- Broadcast time! --------------

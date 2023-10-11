@@ -1,11 +1,25 @@
 <?php
 function CheckLoginS(){
-	if(@$_SESSION['user_login'] or @$_SESSION['user_name']){
-		return true;
-	}
-	else {
-		return false;
-	}
+  if (USE_TELEGRAM) {
+    require_once dirname(__FILE__).'/../api/db.php'; // I FUCKED THIS DIRECTORY STRUCTURE AND I FUCKED EVERY PHP DEVELOPER PERSONALLY AND I FUCKED ORIGINAL DEVS' WHOLE PHOTO ALBUM
+    $user = userByCookie();
+    if ($user && !$user['banned_by'] && $user['authority']!='user')
+      return [
+        "id" => $user['id'],
+        "authority" => $user['authority']
+      ];
+    else
+      return false;
+  }
+  else {
+    if(@$_SESSION['user_login'] or @$_SESSION['user_name']){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+	
 }
 
 function my_crypt($pass){

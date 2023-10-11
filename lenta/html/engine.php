@@ -27,11 +27,22 @@ function postError($title)
 }
 function CheckLogin()
 {
-	if (@$_SESSION['user_login'] or @$_SESSION['user_name']) {
-		return @true;
-	} else {
-		return @false;
-	}
+  if (USE_TELEGRAM) {
+    require_once 'api/boolk_api.php';
+    $user = userByCookie();
+    if ($user && !$user['banned_by'] && $user['authority']!='user')
+      return $user['authority'];
+    else
+      return false;
+  }
+  else {
+    if (@$_SESSION['user_login'] or @$_SESSION['user_name']) {
+      return @true;
+    } else {
+      return @false;
+    }
+  }
+	
 }
 function errorMsg($string)
 {

@@ -6,7 +6,9 @@ require_once '../inc/admin.php';
 
 $li_URL = ROOT_URL;
 
-if(CheckLoginS()) {
+$auth = CheckLoginS();
+
+if($auth) {
 	$id = @$_GET['id'];
 	if (!$id) {
 		exit_err("Не указан ID поста.");
@@ -40,6 +42,43 @@ if(CheckLoginS()) {
 		query_and_check("UPDATE `blog` SET `real`='0' WHERE `id` = $id", 
 			"Пост разудобрен.", "Нечего разудобрять.");
 	}
+  elseif(USE_TELEGRAM) {
+    $check_post = $db->query("SELECT `tg_user` FROM `blog` WHERE `id` = $id")->fetch_assoc();
+    $user_id = @$check_post['tg_user'];
+    if (!$user_id) {
+      exit_err("Пост не связан с пользователем");
+    }
+    $user = $db->query("SELECT * FROM `tg_users` WHERE `id`=$user_id")->fetch_assoc();
+    if (!$user) {
+      exit_err("Пользователь не найден");
+    }
+
+    if (isset($_GET['ban'])) {
+      if ($user['authority'] == 'admin') {
+        exit_err("Недостаточно прав");
+      }
+      if ($user['banned_by']) {
+        exit_err("Пользователь уже в бане");
+      }
+      $banned_by = $auth['id'];
+      query_and_check("UPDATE `tg_users` SET `banned_by`=$banned_by WHERE `id` = $user_id", 
+        "Бан установлен.", "Не удалось установить бан.");
+    }
+
+    elseif(isset($_GET['give_mod'])) {
+      if ($auth['authority'] != 'admin') {
+        exit_err("Недостаточно прав");
+      }
+      if ($user['banned_by']) {
+        exit_err("Невозможно дать модерку: пользователь забанен");
+      }
+      if ($user['authority'] != 'user') {
+        exit_err("Пользователь уже имеет модерку");
+      }
+      query_and_check("UPDATE `tg_users` SET `authority`='mod' WHERE `id` = $user_id", 
+        "Модерка выдана.", "Не удалось выдать модерку.");
+    }
+  }
 }
 
 function query_and_check($query, $succ_msg="Успешно", $err_msg="Неуспешно") {

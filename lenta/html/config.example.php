@@ -26,4 +26,8 @@ define('USE_HCAPTCHA', true);
 define('HCAPTCHA_SITEKEY', '<your_sitekey>'); // get yours @ https://dashboard.hcaptcha.com/
 define('HCAPTCHA_SECRET', '<your_secret_key>');
 
+define('USE_TELEGRAM', true);
+define('BOT_ID', '<your_bot_id>');
+define('BOT_TOKEN', '<your_bot_token>');
+
 mb_internal_encoding('UTF-8');

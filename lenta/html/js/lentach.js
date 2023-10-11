@@ -317,6 +317,9 @@ $(function() {
                     this.href = this.href.replace('?unreal', '?real')
                     $(this).text('Одобряе!').attr('data-action', 'real')
                 }
+                if (action == 'ban' || action == 'give_mod') {
+                  $(this).remove()
+                }
             }
         })
     })
@@ -325,6 +328,45 @@ $(function() {
 // Used with hcaptcha
 function enable_submit() {
     $('input[type="submit"]').attr('disabled', false)
+}
+
+const authLevels = {
+  user: 'Пользователь',
+  mod: 'Модератор',
+  admin: 'Администратор'
+}
+
+function onTelegramAuth(user) {
+  popup.load()
+  $.getJSON('/api/boolk_api.php', {user: user}, res => {
+    if (res.new_html) {
+      $('.telegram-logon').html(res.new_html)
+    }
+    if (res.error) {
+      popup.message('error', res.error)
+      return
+    }
+    popup.message('success', `Ваш уровень доступа: ${authLevels[res.user.authority]}`)
+    $('.onlogin-reveal').css({display: ''})
+    if (res.new_html) {
+      $('.telegram-logon').html(res.new_html)
+    }
+  })
+}
+
+function telegramLogout() {
+  popup.load()
+  $.getJSON('/api/boolk_api.php?logout', res => {
+    if (res.new_html) {
+      $('.telegram-logon').html(res.new_html)
+    }
+    if (res.error) {
+      popup.message('error', res.error)
+      return
+    }
+    popup.message('success', `Вы успешно разлогинились`)
+    $('.onlogin-reveal').css({ display: 'none' })
+  })
 }
 
 $(document).ready(function() {

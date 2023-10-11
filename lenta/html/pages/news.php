@@ -55,6 +55,7 @@ while ($row = $results->fetch_assoc()) {
   $category = whatcat($row['category']);
   $cate = $row['category'];
   $time   = formatDate($row['timestamp']);
+  $tg_user = $row['tg_user'];
   if ($category) @$post_category = "<a href=\"$li_URL/news/$cate/\">$category</a> | "; else @$post_category = "";
   if ($link) {
     @$post_name = "<a target=\"_blank\" href=\"$link\">$name</a>";
@@ -65,7 +66,8 @@ while ($row = $results->fetch_assoc()) {
   if (isset($_GET['id']) and $text2) @$post_text2 = "<p>$text2</p>";
   if ($text2 and !@$_GET['id']) @$post_text2_link =  "<a href=\"$li_URL/news?id=$posid\">Читать далее...</a>"; else @$post_text2_link =  "";
   @$post_text2 = @$post_text2;
-  $post_admin = CheckLogin()
+  $authority = CheckLogin();
+  $post_admin = $authority
     ? "<br>
       <a href=\"$li_URL/api/admin.php?del&id=$posid\" data-action=\"del\" class=\"link admin-ajax-link\">Удалить</a>
       <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a> "
@@ -73,6 +75,14 @@ while ($row = $results->fetch_assoc()) {
         ? "<a href=\"$li_URL/api/admin.php?unreal&id=$posid\" data-action=\"unreal\" class=\"link admin-ajax-link\"><b>Я передумал</b></a>"
         : "<a href=\"$li_URL/api/admin.php?real&id=$posid\" data-action=\"real\" class=\"link admin-ajax-link\"><b>Одобряе!</b></a>"
       )
+      . ((USE_TELEGRAM && $tg_user)
+        ? (
+          " <a href=\"$li_URL/api/admin.php?ban&id=$posid\" data-action=\"ban\" class=\"link admin-ajax-link\"><b>Забанить</b></a>"
+          . ($authority=='admin'
+            ? " <a href=\"$li_URL/api/admin.php?give_mod&id=$posid\" data-action=\"give_mod\" class=\"link admin-ajax-link\"><b>Дать модерку</b></a>"
+            : "" )
+        )
+        : "" )
     : "";
   $resonance = ($rating < 0 ? 'red' : 'green');
   echo <<<EOT
@@ -106,7 +116,15 @@ if ($cnt) {
       EOT;
     }
     echo '<id id="'.@$lastid.'"></id>';
-    echo '<form id="createcomm" method="post" action="api/ncomm.php">
+    if (USE_TELEGRAM) {
+      require_once 'api/boolk_api.php';
+      list($telegram_logon, $may_post) = telegramLogon();
+      $telegram_logon = '<br>'.$telegram_logon;
+    }
+    else {
+      list($telegram_logon, $may_post) = ['', true];
+    }
+    echo $telegram_logon . '<form class="onlogin-reveal" id="createcomm" method="post" action="api/ncomm.php" '.((!$may_post) ? 'style="display:none"' : '').'>
         <div class="olive"> 
           <input type="hidden" name="entry" id="enty" value="'.$post.'">
           <textarea name="message" id="commentText"></textarea>
