@@ -307,6 +307,7 @@ $(function() {
             else {
                 popup.message('success', data.msg)
                 if (action == 'del') {
+                    $(this).parents('.comment').remove()
                     $(this).parents('.entry').remove()
                 }
                 if (action == 'real') {

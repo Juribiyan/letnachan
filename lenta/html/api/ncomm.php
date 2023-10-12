@@ -43,13 +43,6 @@ if (USE_TELEGRAM) {
   $tg_user = $user['id'];
 }
 
-if (avg_strlen($_POST['message']) > MAX_AVG_STRLEN) {
-  exit(json_encode(array(
-    'code' => '403',
-    'response' => 'ПОШЕЛ НАХУЙ'
-  )));
-}
-
 if(trim($_POST['message']) == @$_SESSION['last_comment']) {
     exit(json_encode(array(
     'code' => '403',

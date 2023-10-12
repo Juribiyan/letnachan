@@ -39,8 +39,34 @@ else {
     $page = 1;
 }
 
+function adminButtons($post, $authority, $is_comment=false) {
+  global $li_URL;
+  $posid = $post['id'];
+  $tg_user = $post['tg_user'];
+  return "<a href=\"$li_URL/api/admin.php?del&id=$posid\" data-action=\"del\" class=\"link admin-ajax-link\">Удалить</a>
+    <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a> "
+    . (!$is_comment
+      ? (
+        ($post['real']==1
+          ? "<a href=\"$li_URL/api/admin.php?unreal&id=$posid\" data-action=\"unreal\" class=\"link admin-ajax-link\"><b>Я передумал</b></a>"
+          : "<a href=\"$li_URL/api/admin.php?real&id=$posid\" data-action=\"real\" class=\"link admin-ajax-link\"><b>Одобряе!</b></a>"
+        )
+      )
+      : "" )
+    . ((USE_TELEGRAM && $tg_user)
+      ? (
+        " <a href=\"$li_URL/api/admin.php?ban&id=$posid\" data-action=\"ban\" class=\"link admin-ajax-link\"><b>Забанить</b></a>"
+        . ($authority=='admin'
+          ? " <a href=\"$li_URL/api/admin.php?give_mod&id=$posid\" data-action=\"give_mod\" class=\"link admin-ajax-link\"><b>Дать модерку</b></a>"
+          : "" )
+      )
+      : "" );
+}
+
 $results = $db->query($sqlquery);
 $cnt = 0;
+$authority = CheckLogin();
+
 while ($row = $results->fetch_assoc()) {
   $cnt++;
   $posid = $row['id'];
@@ -55,7 +81,6 @@ while ($row = $results->fetch_assoc()) {
   $category = whatcat($row['category']);
   $cate = $row['category'];
   $time   = formatDate($row['timestamp']);
-  $tg_user = $row['tg_user'];
   if ($category) @$post_category = "<a href=\"$li_URL/news/$cate/\">$category</a> | "; else @$post_category = "";
   if ($link) {
     @$post_name = "<a target=\"_blank\" href=\"$link\">$name</a>";
@@ -66,24 +91,7 @@ while ($row = $results->fetch_assoc()) {
   if (isset($_GET['id']) and $text2) @$post_text2 = "<p>$text2</p>";
   if ($text2 and !@$_GET['id']) @$post_text2_link =  "<a href=\"$li_URL/news?id=$posid\">Читать далее...</a>"; else @$post_text2_link =  "";
   @$post_text2 = @$post_text2;
-  $authority = CheckLogin();
-  $post_admin = $authority
-    ? "<br>
-      <a href=\"$li_URL/api/admin.php?del&id=$posid\" data-action=\"del\" class=\"link admin-ajax-link\">Удалить</a>
-      <a href=\"$li_URL/panel?edit&id=$posid\" class=\"link\">Редактировать</a> "
-      . ($row['real']==1
-        ? "<a href=\"$li_URL/api/admin.php?unreal&id=$posid\" data-action=\"unreal\" class=\"link admin-ajax-link\"><b>Я передумал</b></a>"
-        : "<a href=\"$li_URL/api/admin.php?real&id=$posid\" data-action=\"real\" class=\"link admin-ajax-link\"><b>Одобряе!</b></a>"
-      )
-      . ((USE_TELEGRAM && $tg_user)
-        ? (
-          " <a href=\"$li_URL/api/admin.php?ban&id=$posid\" data-action=\"ban\" class=\"link admin-ajax-link\"><b>Забанить</b></a>"
-          . ($authority=='admin'
-            ? " <a href=\"$li_URL/api/admin.php?give_mod&id=$posid\" data-action=\"give_mod\" class=\"link admin-ajax-link\"><b>Дать модерку</b></a>"
-            : "" )
-        )
-        : "" )
-    : "";
+  $post_admin = $authority ? "<br>".adminButtons($row, $authority) : "";
   $resonance = ($rating < 0 ? 'red' : 'green');
   echo <<<EOT
 <div class="entry">
@@ -104,11 +112,12 @@ if ($cnt) {
       @$lastid = $row['id'];
       $comid = $row['id'];
       $comtext = stripslashes($row['message']);
-      $comtime = formatDate($row['timestamp']);          
+      $comtime = formatDate($row['timestamp']);
+      $comm_admin = $authority ? '<span class="comment-admin">' . adminButtons($row, $authority, true) . '</span>' : "";      
       echo <<<EOT
       <a id="{$comid}"></a>
       <div class="comment" id="comment{$comid}">
-        <div class="comment-info">{$comtime} <a id="href" onclick="javascript:insert('&gt;&gt;{$comid}');return false;">№{$comid}</a></div>
+        <div class="comment-info">{$comtime} <a id="href" onclick="javascript:insert('&gt;&gt;{$comid}');return false;">№{$comid}</a>{$comm_admin}</div>
         <div class="comment-text">
           <p>{$comtext}</p>
         </div>
@@ -124,7 +133,7 @@ if ($cnt) {
     else {
       list($telegram_logon, $may_post) = ['', true];
     }
-    echo $telegram_logon . '<form class="onlogin-reveal" id="createcomm" method="post" action="api/ncomm.php" '.((!$may_post) ? 'style="display:none"' : '').'>
+    echo '<form class="onlogin-reveal" id="createcomm" method="post" action="api/ncomm.php" '.((!$may_post) ? 'style="display:none"' : '').'>
         <div class="olive"> 
           <input type="hidden" name="entry" id="enty" value="'.$post.'">
           <textarea name="message" id="commentText"></textarea>
@@ -132,7 +141,7 @@ if ($cnt) {
           <input type="submit" class="button" name="submitComment" value="Отправить" style="float:right;"'.
             (USE_HCAPTCHA ? ' disabled' : '').'>
         </div>
-      </form>'; 
+      </form>' . $telegram_logon; 
   }
 }
 else {

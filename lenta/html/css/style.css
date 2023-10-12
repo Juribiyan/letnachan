@@ -190,14 +190,6 @@ div.entry:hover {
   display: block;
 }
 
-.news-header .info a {
-  color: #AAA;
-}
-
-.news-header .info a:hover {
-  color: #000;
-}
-
 .news-info {
   font-size: 12px;
   color: #AAA;
@@ -890,4 +882,18 @@ figure label>input[type=checkbox]:checked+.expandable-thumb .et-expanded {
   color: #fff;
   border-color: #900;
   background-color: #900;
+}
+
+.comment-admin {
+  margin-left: 2ch;
+}
+
+.news-header .info a,
+.comment-admin a {
+  color: #AAA;
+}
+
+.news-header .info a:hover,
+.comment-admin a:hover {
+  color: #000;
 }
