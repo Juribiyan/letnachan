@@ -346,7 +346,7 @@ function onTelegramAuth(user) {
       popup.message('error', res.error)
       return
     }
-    popup.message('success', `Ваш уровень доступа: ${authLevels[res.user.authority]}`)
+    popup.message('success', `Ваш уровень доступа: ${authLevels[res.authority]}`)
     $('.onlogin-reveal').css({display: ''})
     if (res.new_html) {
       $('.telegram-logon').html(res.new_html)
