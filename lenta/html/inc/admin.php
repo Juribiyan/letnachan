@@ -1,7 +1,7 @@
 <?php
 function CheckLoginS(){
   if (USE_TELEGRAM) {
-    require_once dirname(__FILE__).'/../api/db.php'; // I FUCKED THIS DIRECTORY STRUCTURE AND I FUCKED EVERY PHP DEVELOPER PERSONALLY AND I FUCKED ORIGINAL DEVS' WHOLE PHOTO ALBUM
+    require_once dirname(__FILE__).'/../api/boolk_api.php'; // I FUCKED THIS DIRECTORY STRUCTURE AND I FUCKED EVERY PHP DEVELOPER PERSONALLY AND I FUCKED ORIGINAL DEVS' WHOLE PHOTO ALBUM
     $user = userByCookie();
     if ($user && !$user['banned_by'] && $user['authority']!='user')
       return [
