@@ -43,6 +43,7 @@ CREATE TABLE `blog` (
   `ip` VARCHAR(20) NOT NULL,
   `real` VARCHAR(1) NOT NULL DEFAULT '0',
   `ch` INT(1) NOT NULL DEFAULT '0',
+  `tg_user` INT(10) UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id` (`id`) 
 )
@@ -97,6 +98,15 @@ CREATE TABLE `was` (
   `ip` bigint(20) NOT NULL,
   `dt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `tg_users` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `authority` ENUM('user','mod','admin') NOT NULL DEFAULT 'user',
+  `hash` CHAR(64) NOT NULL,
+  `banned_by` INT(10) UNSIGNED NULL DEFAULT '0',
+  INDEX `tg_id_index` (`id`) USING BTREE
+) COLLATE='utf8mb4_unicode_ci' ENGINE=InnoDB AUTO_INCREMENT=1 ;
 
 --
 -- Индексы сохранённых таблиц
